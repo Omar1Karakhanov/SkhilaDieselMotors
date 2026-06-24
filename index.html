@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>სხილა დიზელ მოტორსი | პროფესიონალური სერვისი</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* =============================================
+           DESIGN TOKENS
+        ============================================= */
+        :root {
+            --navy:        #0d1b35;
+            --navy-mid:    #162240;
+            --navy-light:  #1e2f55;
+            --red:         #c8181a;
+            --red-dark:    #a31215;
+            --red-glow:    rgba(200, 24, 26, 0.18);
+            --white:       #ffffff;
+            --offwhite:    #f0f2f6;
+            --gray-100:    #e4e8ef;
+            --gray-300:    #9ba4b4;
+            --gray-500:    #5a6478;
+            --gray-800:    #1c2333;
+            --metal:       #b0b8c6;
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-head:    'Montserrat', sans-serif;
+            --font-body:    'Inter', sans-serif;
+            --header-h:    72px;
+            --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            background-color: var(--navy);
+            color: var(--white);
+            font-family: var(--font-body);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        img { max-width: 100%; display: block; }
+        a { text-decoration: none; color: inherit; }
+
+        /* =============================================
+           UTILITY
+        ============================================= */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .section-label {
+            display: inline-block;
+            font-family: var(--font-head);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 1rem;
+        }
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 2px;
+            background: var(--red);
+            vertical-align: middle;
+            margin-right: 0.6rem;
+        }
+        .section-title {
+            font-family: var(--font-head);
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--white);
+        }
+        .section-title em { font-style: normal; color: var(--red); }
+        .section-body {
+            font-size: 1rem;
+            color: var(--gray-300);
+            max-width: 52ch;
+            line-height: 1.75;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-radius: 3px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.28s var(--ease-out);
+        }
+        .btn-red {
+            background: var(--red);
+            color: var(--white);
+        }
+        .btn-red:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,24,26,0.35); }
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 1.5px solid rgba(255,255,255,0.3);
+        }
+        .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(48px);
+            transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+        }
+        [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+        [data-reveal-delay="1"] { transition-delay: 0.1s; }
+        [data-reveal-delay="2"] { transition-delay: 0.2s; }
+        [data-reveal-delay="3"] { transition-delay: 0.3s; }
+        [data-reveal-delay="4"] { transition-delay: 0.4s; }
+
+        /* =============================================
+           HEADER
+        ============================================= */
+        .site-header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: var(--header-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            z-index: 900;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            border-bottom: 1px solid transparent;
+        }
+        .site-header.scrolled {
+            background: rgba(13, 27, 53, 0.97);
+            border-bottom-color: rgba(255,255,255,0.07);
+            backdrop-filter: blur(12px);
+        }
+        .site-logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        .site-logo-main {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            color: var(--white);
+        }
+        .site-logo-sub {
+            font-family: var(--font-body);
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+            margin-top: 2px;
+        }
+        .site-logo-accent { color: var(--red); }
+
+        .main-nav { display: flex; gap: 2rem; align-items: center; }
+        .nav-link {
+            font-family: var(--font-head);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+            transition: color 0.25s ease;
+            position: relative;
+            padding-bottom: 3px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 1.5px;
+            background: var(--red);
+            transition: width 0.3s var(--ease-out);
+        }
+        .nav-link:hover { color: var(--white); }
+        .nav-link:hover::after { width: 100%; }
+
+        .header-cta { display: flex; align-items: center; gap: 1.5rem; }
+        .header-phone {
+            font-family: var(--font-head);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.03em;
+        }
+        .header-phone i { color: var(--red); margin-right: 0.35rem; }
+
+        .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; z-index: 1010; }
+        .burger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+        .burger.is-active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .burger.is-active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .burger.is-active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--header-h); left: 0;
+            width: 100%; height: calc(100vh - var(--header-h));
+            background: var(--navy);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            z-index: 800;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+        .mobile-menu .nav-link { font-size: 1.2rem; color: var(--white); }
+
+        /* =============================================
+           HERO
+        ============================================= */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: var(--header-h);
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #050d1a 0%, #0d1b35 50%, #0e1f3a 100%);
+        }
+        /* Subtle grid texture */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+        }
+        .hero-accent-line {
+            position: absolute;
+            left: 0; top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--red) 30%, var(--red) 70%, transparent);
+        }
+        .hero-glow {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200,24,26,0.08) 0%, transparent 70%);
+            top: 50%; left: 60%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 0 2rem;
+        }
+        .hero-eyebrow {
+            font-family: var(--font-head);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.3s var(--ease-out) forwards;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            width: 32px; height: 2px;
+            background: var(--red);
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            line-height: 0.95;
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.5s var(--ease-out) forwards;
+        }
+        .hero-title .line-red { color: var(--red); display: block; }
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: var(--gray-300);
+            max-width: 48ch;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.7s var(--ease-out) forwards;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.9s var(--ease-out) forwards;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            opacity: 0;
+            animation: fadeUp 0.9s 1.1s var(--ease-out) forwards;
+        }
+        .hero-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            line-height: 1;
+            color: var(--white);
+        }
+        .hero-stat-num span { color: var(--red); }
+        .hero-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-300);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.3rem;
+        }
+
+        /* Carousel showcase (kept from original) */
+        #showcase-container {
+            width: 100%;
+            height: 380px;
+            position: absolute;
+            bottom: 0; left: 0;
+            pointer-events: none;
+        }
+        .carousel-wrapper { position: absolute; width: 100%; height: 100%; perspective: 2000px; }
+        .carousel { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; pointer-events: none; }
+        .slide {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 260px; height: 260px;
+            transform-origin: center center;
+            pointer-events: auto;
+            cursor: grab;
+        }
+        .slide:active { cursor: grabbing; }
+        .slide img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+        }
+        /* Shimmer */
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 70%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent);
+            transform: skewX(-25deg);
+            transition: left 0.7s ease;
+        }
+        .slide:hover::after { left: 150%; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =============================================
+           MARQUEE STRIP
+        ============================================= */
+        .marquee-strip {
+            background: var(--red);
+            overflow: hidden;
+            padding: 0.7rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+        }
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            width: max-content;
+            animation: marqueeScroll 28s linear infinite;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item {
+            font-family: var(--font-head);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.9);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .marquee-item::after {
+            content: '//';
+            color: rgba(255,255,255,0.4);
+        }
+        @keyframes marqueeScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* =============================================
+           PAIN POINTS / SYMPTOMS
+        ============================================= */
+        .symptoms-section {
+            padding: 7rem 0;
+            background: var(--navy-mid);
+            position: relative;
+        }
+        .symptoms-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200,24,26,0.4), transparent);
+        }
+        .symptoms-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .symptom-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 4px;
+            padding: 1.8rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.1rem;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--ease-out);
+        }
+        .symptom-card:hover {
+            background: rgba(200,24,26,0.07);
+            border-color: rgba(200,24,26,0.3);
+            transform: translateY(-4px);
+        }
+        .symptom-icon {
+            flex-shrink: 0;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--red-glow);
+            border-radius: 3px;
+            color: var(--red);
+            font-size: 1rem;
+        }
+        .symptom-text {
+            font-size: 0.9rem;
+            color: var(--gray-300);
+            line-height: 1.6;
+        }
+        .symptom-text strong {
+            display: block;
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+        }
+
+        /* =============================================
+           SERVICES
+        ============================================= */
+        .services-section {
+            padding: 8rem 0;
+            background: var(--navy);
+            position: relative;
+        }
+        .services-intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: end;
+            margin-bottom: 5rem;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+        }
+        .service-card {
+            background: var(--navy-mid);
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.4s ease;
+            cursor: default;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 3px;
+            background: var(--red);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-out);
+        }
+        .service-card:hover { background: var(--navy-light); }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            line-height: 1;
+            color: rgba(255,255,255,0.05);
+            position: absolute;
+            top: 1.5rem; right: 2rem;
+            transition: color 0.4s ease;
+        }
+        .service-card:hover .service-number { color: rgba(200,24,26,0.12); }
+        .service-icon-wrap {
+            width: 52px; height: 52px;
+            border: 1.5px solid rgba(200,24,26,0.3);
+            border-radius: 3px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--red);
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .service-card:hover .service-icon-wrap {
+            background: var(--red-glow);
+            border-color: var(--red);
+        }
+        .service-card h3 {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        .service-card p {
+            font-size: 0.9rem;
+            color: var(--gray-300);
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+        .service-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .service-features li {
+            font-size: 0.82rem;
+            color: var(--gray-300);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .service-features li::before {
+            content: '';
+            width: 14px; height: 1.5px;
+            background: var(--red);
+            flex-shrink: 0;
+        }
+
+        /* =============================================
+           UNDER THE LOUPE (KEPT + RESTYLED)
+        ============================================= */
+        .loupe-section {
+            padding: 8rem 0;
+            background: var(--navy-mid);
+            position: relative;
+        }
+        .loupe-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200,24,26,0.4), transparent);
+        }
+        .loupe-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        .loupe-image-wrapper {
+            position: relative;
+            height: 65vh;
+            min-height: 480px;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .main-loupe-image {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: filter 0.8s ease, transform 0.8s ease;
+        }
+        .main-loupe-image.is-dimmed {
+            filter: brightness(0.35) blur(5px);
+            transform: scale(0.96);
+        }
+        .digital-loupe {
+            position: absolute;
+            width: 190px; height: 190px;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            background-size: 500%;
+            box-shadow: 0 0 0 1px rgba(200,24,26,0.3), 0 12px 40px rgba(0,0,0,0.6);
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.5);
+            will-change: transform, opacity;
+        }
+        .loupe-details { display: flex; flex-direction: column; gap: 0.8rem; }
+        .loupe-header { margin-bottom: 1.5rem; }
+        .hotspot-trigger {
+            background: none;
+            border: none;
+            border-left: 2px solid rgba(255,255,255,0.08);
+            padding: 1.4rem 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            color: var(--gray-300);
+            transition: background 0.3s ease, border-color 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        .hotspot-trigger.is-active {
+            background: rgba(200,24,26,0.08);
+            border-color: var(--red);
+        }
+        .hotspot-trigger:not(.is-active):hover {
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.2);
+        }
+        .hotspot-trigger h3 {
+            font-family: var(--font-head);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.4rem;
+        }
+        .hotspot-trigger p { font-size: 0.88rem; line-height: 1.65; }
+
+        /* =============================================
+           ABOUT
+        ============================================= */
+        .about-section {
+            padding: 8rem 0;
+            background: var(--navy);
+        }
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .about-image-mosaic {
+            position: relative;
+            height: 580px;
+        }
+        .about-img-primary {
+            position: absolute;
+            top: 0; left: 0;
+            width: 75%; height: 75%;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .about-img-secondary {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 55%; height: 55%;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 3px solid var(--navy);
+        }
+        .about-badge {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--red);
+            border-radius: 50%;
+            width: 110px; height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 5;
+            border: 4px solid var(--navy);
+        }
+        .about-badge-num {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            line-height: 1;
+        }
+        .about-badge-text {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            line-height: 1.3;
+            margin-top: 2px;
+        }
+        .about-text { display: flex; flex-direction: column; gap: 1.5rem; }
+        .about-title { margin-bottom: 0.5rem; }
+        .about-pillars {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .pillar {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 1.2rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 4px;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+        .pillar:hover {
+            background: rgba(200,24,26,0.05);
+            border-color: rgba(200,24,26,0.2);
+        }
+        .pillar-icon { color: var(--red); font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
+        .pillar h4 {
+            font-family: var(--font-head);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.2rem;
+        }
+        .pillar p { font-size: 0.8rem; color: var(--gray-300); line-height: 1.55; }
+
+        /* =============================================
+           BRANDS
+        ============================================= */
+        .brands-section {
+            padding: 4rem 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: var(--navy-mid);
+        }
+        .brands-label {
+            font-family: var(--font-head);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .brands-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2.5rem 3.5rem;
+        }
+        .brand-item {
+            font-family: var(--font-head);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            transition: color 0.3s ease;
+        }
+        .brand-item:hover { color: var(--metal); }
+
+        /* =============================================
+           CONTACT / CTA
+        ============================================= */
+        .contact-section {
+            padding: 8rem 0;
+            background: var(--navy);
+            position: relative;
+        }
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 5rem;
+            align-items: start;
+        }
+        .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .contact-detail:last-of-type { border-bottom: none; }
+        .contact-detail-icon {
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--red-glow);
+            border: 1px solid rgba(200,24,26,0.2);
+            border-radius: 3px;
+            color: var(--red);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .contact-detail-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            margin-bottom: 0.3rem;
+        }
+        .contact-detail-value {
+            font-family: var(--font-head);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        .contact-detail-value a:hover { color: var(--red); }
+
+        .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .form-field { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+        }
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            padding: 0.9rem 1.1rem;
+            border-radius: 3px;
+            outline: none;
+            transition: border-color 0.25s ease, background 0.25s ease;
+            width: 100%;
+        }
+        .form-field select { appearance: none; cursor: pointer; }
+        .form-field input::placeholder,
+        .form-field textarea::placeholder { color: var(--gray-500); }
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: var(--red);
+            background: rgba(200,24,26,0.04);
+        }
+        .form-field textarea { resize: vertical; min-height: 120px; }
+        .form-note {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+        .form-status {
+            padding: 0.8rem 1rem;
+            border-radius: 3px;
+            font-size: 0.88rem;
+            display: none;
+        }
+        .form-status.success { background: rgba(22, 160, 80, 0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); display: block; }
+        .form-status.error { background: rgba(200,24,26,0.1); color: #fca5a5; border: 1px solid rgba(200,24,26,0.2); display: block; }
+
+        /* =============================================
+           CTA BANNER
+        ============================================= */
+        .cta-banner {
+            background: var(--red);
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .cta-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .cta-text-group {}
+        .cta-headline {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1;
+            color: var(--white);
+            margin-bottom: 0.6rem;
+        }
+        .cta-sub {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.75);
+        }
+        .cta-phone-big {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            letter-spacing: 0.03em;
+            color: var(--white);
+            white-space: nowrap;
+        }
+        .btn-cta-white {
+            background: var(--white);
+            color: var(--red);
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.9rem 2rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        .site-footer {
+            background: #080f1f;
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+        .footer-brand {}
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            letter-spacing: 0.05em;
+            color: var(--white);
+            margin-bottom: 0.3rem;
+        }
+        .footer-logo span { color: var(--red); }
+        .footer-tagline {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+        .footer-desc {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.75;
+            max-width: 34ch;
+        }
+        .footer-col-title {
+            font-family: var(--font-head);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+        .footer-links a {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            transition: color 0.25s ease;
+        }
+        .footer-links a:hover { color: var(--white); }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+        .footer-socials { display: flex; gap: 1rem; }
+        .footer-socials a {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 3px;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+        .footer-socials a:hover {
+            border-color: var(--red);
+            color: var(--white);
+            background: var(--red-glow);
+        }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 1024px) {
+            .services-grid { grid-template-columns: 1fr; }
+            .about-layout { grid-template-columns: 1fr; gap: 3rem; }
+            .about-image-mosaic { height: 380px; }
+            .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main-nav, .header-phone { display: none; }
+            .burger { display: flex; }
+            .mobile-menu { display: flex; }
+            .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+            .services-intro { grid-template-columns: 1fr; gap: 2rem; }
+            .loupe-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+            .loupe-image-wrapper { height: 50vh; min-height: 320px; }
+            .about-pillars { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .cta-inner { justify-content: center; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            :root { --header-h: 64px; }
+            .hero-actions { flex-direction: column; }
+            .hero-actions .btn { justify-content: center; }
+            .symptoms-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- =============================================
+     HEADER
+============================================= -->
+<header class="site-header" id="site-header">
+    <a href="#" class="site-logo">
+        <span class="site-logo-main">სხილა <span class="site-logo-accent">დიზელ</span></span>
+        <span class="site-logo-sub">Diesel Motors &nbsp;// Georgian Standard</span>
+    </a>
+
+    <nav class="main-nav">
+        <a href="#services" class="nav-link">სერვისი</a>
+        <a href="#diagnostics" class="nav-link">დიაგნოსტიკა</a>
+        <a href="#about" class="nav-link">ჩვენ შესახებ</a>
+        <a href="#contact" class="nav-link">კონტაქტი</a>
+    </nav>
+
+    <div class="header-cta">
+        <a href="tel:+995593004200" class="header-phone">
+            <i class="fas fa-phone-alt"></i> 593 00 42 00
+        </a>
+        <a href="#contact" class="btn btn-red" style="display:none;" id="header-cta-btn">დარეკვა</a>
+    </div>
+
+    <div class="burger" id="burger">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu">
+    <a href="#services" class="nav-link">სერვისი</a>
+    <a href="#diagnostics" class="nav-link">დიაგნოსტიკა</a>
+    <a href="#about" class="nav-link">ჩვენ შესახებ</a>
+    <a href="#contact" class="nav-link">კონტაქტი</a>
+    <a href="tel:+995593004200" class="btn btn-red" style="margin-top:1rem;">593 00 42 00</a>
+</nav>
+
+<!-- =============================================
+     HERO
+============================================= -->
+<section class="hero-section" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-accent-line"></div>
+    <div class="hero-glow"></div>
+
+    <div class="container hero-content">
+        <p class="hero-eyebrow">თბილისი, საქართველო &mdash; 15+ წლიანი გამოცდილება</p>
+        <h1 class="hero-title">
+            დიზელის<br>
+            <span class="line-red">სახელოსნო</span>
+        </h1>
+        <p class="hero-subtitle">
+            ძრავი, ტურბო, საწვავის სისტემა &mdash; სრული ციკლის სერვისი
+            ევროპული სტანდარტის აღჭურვილობით.
+        </p>
+        <div class="hero-actions">
+            <a href="#contact" class="btn btn-red">
+                <i class="fas fa-wrench"></i> ჩაწეროთ სერვისში
+            </a>
+            <a href="tel:+995593004200" class="btn btn-outline">
+                <i class="fas fa-phone-alt"></i> 593 00 42 00
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <div class="hero-stat-num">15<span>+</span></div>
+                <div class="hero-stat-label">წლის გამოცდილება</div>
+            </div>
+            <div>
+                <div class="hero-stat-num">2500<span>+</span></div>
+                <div class="hero-stat-label">შესრულებული სამუშაო</div>
+            </div>
+            <div>
+                <div class="hero-stat-num">98<span>%</span></div>
+                <div class="hero-stat-label">კმაყოფილი კლიენტი</div>
+            </div>
+            <div>
+                <div class="hero-stat-num">5</div>
+                <div class="hero-stat-label">ბრენდის სპეციალისტი</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Carousel — ENGINE PARTS (replace src when photos available) -->
+    <div id="showcase-container">
+        <div class="carousel-wrapper">
+            <div class="carousel" id="carousel">
+                <!-- Replace these Unsplash sources with your own photos -->
+                <div class="slide"><img src="https://agro-trade.ge/wp-content/uploads/2022/03/450-450.jpg" alt="Diesel Engine"></div>
+                <div class="slide"><img src="https://worldsport.ge/img/articles/3ef1c896067473c055858a20ab94eb37.jpg" alt="Turbocharger"></div>
+                <div class="slide"><img src="https://bauma.ge/files/products/jhxyfEwpKojr5iu5Czaw3oVwPRljiy.JPG" alt="Engine Service"></div>
+                <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiq1VO4yG-8iWVyo8jvMVb8nYvhScJtwz_unVWleWwOqD8-ZFb_-aXSockImRSYDGsz0V7ke1vec5rM-FMW47W7GDBay3kGw7gZHi4feCp8pyeB1-OXDpAxWEqd8Be2159VuwH_1Zr7U7vQ/s1600/%E1%83%93%E1%83%98%E1%83%96%E1%83%94%E1%83%9A%E1%83%98%E1%83%A1+%E1%83%AB%E1%83%A0%E1%83%90%E1%83%95%E1%83%90.jpg" alt="Workshop"></div>
+                <div class="slide"><img src="https://gottuned.com/wp-content/uploads/2020/04/gottuned_bmw_20t_b48b20_1.jpg" alt="Diagnostic Equipment"></div>
+                <div class="slide"><img src="https://static.tnet.ge/myparts/photos/thumbs/0312/12841770_1.jpg" alt="Fuel System"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     MARQUEE
+============================================= -->
+<div class="marquee-strip">
+    <div class="marquee-track">
+        <span class="marquee-item">ძრავის სერვისი</span>
+        <span class="marquee-item">ტურბოჩარჯერის შეკეთება</span>
+        <span class="marquee-item">საწვავის სისტემა</span>
+        <span class="marquee-item">კომპიუტერული დიაგნოსტიკა</span>
+        <span class="marquee-item">DPF სერვისი</span>
+        <span class="marquee-item">ინჟექტორების გამოწმება</span>
+        <span class="marquee-item">BMW / Mercedes / VW / Jeep / Land Rover</span>
+        <span class="marquee-item">ძრავის სერვისი</span>
+        <span class="marquee-item">ტურბოჩარჯერის შეკეთება</span>
+        <span class="marquee-item">საწვავის სისტემა</span>
+        <span class="marquee-item">კომპიუტერული დიაგნოსტიკა</span>
+        <span class="marquee-item">DPF სერვისი</span>
+        <span class="marquee-item">ინჟექტორების გამოწმება</span>
+        <span class="marquee-item">BMW / Mercedes / VW / Jeep / Land Rover</span>
+    </div>
+</div>
+
+<!-- =============================================
+     SYMPTOMS / PAIN POINTS
+============================================= -->
+<section class="symptoms-section">
+    <div class="container">
+        <div class="symptoms-header" data-reveal>
+            <span class="section-label">იცანით პრობლემა</span>
+            <h2 class="section-title" style="text-align:center;">თქვენი ავტომობილი <em>გამოგიცხადეთ</em> სიგნალი?</h2>
+            <p class="section-body" style="text-align:center;margin:1rem auto 0;">
+                ეს სიმპტომები ხშირად ნიშნავს, რომ ძრავი, ტურბო ან საწვავის სისტემა ყურადღებას საჭიროებს. ნუ დაელოდებით პრობლემის გაძლიერებას.
+            </p>
+        </div>
+        <div class="symptoms-grid">
+            <div class="symptom-card" data-reveal data-reveal-delay="1">
+                <div class="symptom-icon"><i class="fas fa-smog"></i></div>
+                <div class="symptom-text"><strong>შავი კვამლი გამონაბოლქვიდან</strong>საწვავის არასრული წვა, ინჟექტორის ან ტურბოს პრობლემა.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="2">
+                <div class="symptom-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="symptom-text"><strong>ვერ გადის ტექდათვალიერებას</strong>სტანდარტს ვერ აკმაყოფილებს &mdash; ვასწორებთ სწრაფად.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="3">
+                <div class="symptom-icon"><i class="fas fa-oil-can"></i></div>
+                <div class="symptom-text"><strong>ზეთის გაზრდილი მოხმარება</strong>ძრავის ცვეთა ან ტურბოს ლუქი &mdash; დროული დიაგნოსტიკა იცავს ძრავს.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="4">
+                <div class="symptom-icon"><i class="fas fa-key"></i></div>
+                <div class="symptom-text"><strong>ძნელი გაქანება ცივ ამინდში</strong>საწვავის სისტემის ან გლოს სანთლების პრობლემა.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="1">
+                <div class="symptom-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="symptom-text"><strong>ძრავის ვიბრაცია და ჯახი</strong>ინჟექტორების ან კომპრესიის პრობლემა, სასწრაფო შემოწმება სჭირდება.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="2">
+                <div class="symptom-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="symptom-text"><strong>სიმძლავრის კარგვა</strong>ტურბოს ან საწვავის სათავსოს გაჭედვა ამცირებს ავტომობილის ეფექტიანობას.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="3">
+                <div class="symptom-icon"><i class="fas fa-stopwatch"></i></div>
+                <div class="symptom-text"><strong>დაყოვნება აჩქარებისას</strong>ტურბოს "ლეგი" ან საწვავის წნევის დაქვეითება &mdash; დიაგნოსტიკით ვადგენთ.</div>
+            </div>
+            <div class="symptom-card" data-reveal data-reveal-delay="4">
+                <div class="symptom-icon"><i class="fas fa-filter"></i></div>
+                <div class="symptom-text"><strong>DPF / FAP ნაწილაკების ფილტრი</strong>შევსებული ფილტრი ძრავს ანელებს. ვახდენთ ფილტრის გაწმენდას ან გადაპროგრამებას.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     SERVICES
+============================================= -->
+<section class="services-section" id="services">
+    <div class="container">
+        <div class="services-intro">
+            <div data-reveal>
+                <span class="section-label">სერვისები</span>
+                <h2 class="section-title">სრული სპექტრი<br><em>დიზელის</em> სერვისი</h2>
+            </div>
+            <div data-reveal>
+                <p class="section-body">
+                    ვასრულებთ ყველა სახის სამუშაოს — მარტივი ტექნიკური მომსახურებიდან ძრავის სრულ აღდგენამდე. ჩვენი ბაზა აღჭურვილია ევროპული სტანდარტის ტექნოლოგიით.
+                </p>
+                <a href="#contact" class="btn btn-red" style="margin-top:2rem;">ჩაწეროთ სერვისში</a>
+            </div>
+        </div>
+
+        <div class="services-grid" data-reveal>
+            <!-- Service 1 -->
+            <div class="service-card">
+                <span class="service-number">01</span>
+                <div class="service-icon-wrap"><i class="fas fa-laptop-code"></i></div>
+                <h3>ავტომობილის დიაგნოსტირება</h3>
+                <p>თანამედროვე კომპიუტერული სისტემებით ვახდენთ ყველა ელექტრონული კოდის წამოღებას და ზუსტ ანალიზს. სავარაუდო პრობლემის ნაცვლად — ფაქტობრივი ვლინება.</p>
+                <ul class="service-features">
+                    <li>OBD-II / CAN Bus სრული სკანი</li>
+                    <li>ცოცხალი სენსორების მონიტორინგი</li>
+                    <li>Bosch KTS სისტემა</li>
+                    <li>დეტალური ანგარიში კლიენტისთვის</li>
+                </ul>
+            </div>
+            <!-- Service 2 -->
+            <div class="service-card">
+                <span class="service-number">02</span>
+                <div class="service-icon-wrap"><i class="fas fa-cogs"></i></div>
+                <h3>ძრავის სერვისი</h3>
+                <p>ძრავის სრული შემოწმება, პრევენციული მოვლა, რეკონდიცია და კაპიტალური შეკეთება. ვმუშაობთ ყველა ევროპული და იაპონური ბრენდის დიზელ ძრავებზე.</p>
+                <ul class="service-features">
+                    <li>კომპრესიის გაზომვა</li>
+                    <li>ძრავის ზედა / ქვედა ნახევრის გახსნა</li>
+                    <li>მაგისტრალური მოდულის შეცვლა</li>
+                    <li>ახალი ძრავის მოწყობა</li>
+                </ul>
+            </div>
+            <!-- Service 3 -->
+            <div class="service-card">
+                <span class="service-number">03</span>
+                <div class="service-icon-wrap"><i class="fas fa-wind"></i></div>
+                <h3>ტურბოჩარჯერის სერვისი</h3>
+                <p>ტურბოს კვამლი, ხმაური ან სიმძლავრის კარგვა? ვახდენთ ტურბოს სრულ შემოწმებას, ბალანსირებას, ხელახლა აწყობას ან ახლით ჩანაცვლებას.</p>
+                <ul class="service-features">
+                    <li>ტურბოს ბალანსირება სტენდზე</li>
+                    <li>ლუქებისა და კარტრიჯის შეცვლა</li>
+                    <li>VGT / VNT სარქვლის სერვისი</li>
+                    <li>Wastegate-ის კალიბრაცია</li>
+                </ul>
+            </div>
+            <!-- Service 4 -->
+            <div class="service-card">
+                <span class="service-number">04</span>
+                <div class="service-icon-wrap"><i class="fas fa-gas-pump"></i></div>
+                <h3>საწვავის სისტემის სერვისი</h3>
+                <p>Common Rail, ინჟექტორები, HP ტუმბო — ვახდენთ სრულ დიაგნოსტიკასა და მომსახურებას. ულტრაბგერითი გამწმენდი სისტემით ვასუფთავებთ ინჟექტორებს.</p>
+                <ul class="service-features">
+                    <li>ინჟექტორის ულტრაბგერითი წმენდა</li>
+                    <li>HP ტუმბოს კალიბრაცია</li>
+                    <li>Common Rail წნევის ტესტი</li>
+                    <li>Piezo ინჟექტორების სერვისი</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     UNDER THE LOUPE (KEPT)
+============================================= -->
+<section class="loupe-section" id="diagnostics">
+    <div class="container">
+        <div style="text-align:center; margin-bottom:4rem;" data-reveal>
+            <span class="section-label">სიღრმისეული ანალიზი</span>
+            <h2 class="section-title">გამადიდებელი <em>შუშის ქვეშ</em></h2>
+            <p class="section-body" style="margin:1rem auto 0; text-align:center;">
+                ჩვენი სპეციალისტები ტექნიკის ყოველ დეტალს ამოწმებენ. ქვემოთ ნახეთ ტიპური დიაგნოსტიკური წერტილები.
+            </p>
+        </div>
+        <div class="loupe-layout">
+            <div class="loupe-image-wrapper" data-reveal>
+                <!--
+                    REPLACE THIS IMAGE:
+                    Recommended: close-up of diesel engine / turbo / injector rail
+                    Dimensions: tall portrait or square, min 800px wide
+                -->
+                <img class="main-loupe-image"
+                    src="https://i.pinimg.com/736x/a2/8c/09/a28c09914c6a3e3fdb611e716521a385.jpg"
+                    alt="Diesel engine diagnostic view"
+                    id="main-loupe-image">
+                <div class="digital-loupe" id="digital-loupe"></div>
+            </div>
+
+            <div class="loupe-details" data-reveal>
+                <div class="loupe-header">
+                    <span class="section-label">ინტერაქტიური ხედი</span>
+                    <h3 class="section-title" style="font-size:1.6rem;">აირჩიეთ<br><em>კომპონენტი</em></h3>
+                </div>
+
+                <button class="hotspot-trigger is-active" data-hotspot-id="1" data-x="38%" data-y="28%">
+                    <h3>საწვავის მაღალი წნევის სისტემა</h3>
+                    <p>Common Rail სისტემა ქმნის 1800+ ბარ წნევას. უმნიშვნელო გაჟონვაც კი ამცირებს ეფექტიანობას — ვამოწმებთ ელექტრული სტენდით.</p>
+                </button>
+
+                <button class="hotspot-trigger" data-hotspot-id="2" data-x="62%" data-y="44%">
+                    <h3>ტურბოს ჩარჩო და ლუქები</h3>
+                    <p>ზეთის ნიშნები ტურბოს კორპუსზე, ხმაური ან მოხეთქვა — ნიშნავს ბეარინგის ან ლუქის ცვეთას. ვახდენთ ჩარჩოს ბალანსირებას 150,000 RPM-ზე.</p>
+                </button>
+
+                <button class="hotspot-trigger" data-hotspot-id="3" data-x="50%" data-y="70%">
+                    <h3>EGR / DPF სისტემა</h3>
+                    <p>გაჭედილი EGR ვალვი ან სავსე DPF ფილტრი ამცირებს სიმძლავრეს და ზრდის ძრავის ტემპერატურას. ვახდენთ გაწმენდას ან ხელახალ დაპროგრამებას.</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     ABOUT
+============================================= -->
+<section class="about-section" id="about">
+    <div class="container">
+        <div class="about-layout">
+            <div class="about-image-mosaic" data-reveal>
+                <!--
+                    REPLACE THESE IMAGES:
+                    Primary: workshop interior, mechanic at work
+                    Secondary: diagnostic equipment, close-up of engine
+                -->
+                <img class="about-img-primary"
+                    src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=700&q=80"
+                    alt="სხილა დიზელ სახელოსნო">
+                <img class="about-img-secondary"
+                    src="https://images.unsplash.com/photo-1562564055-71e051d33c19?w=500&q=80"
+                    alt="კომპიუტერული დიაგნოსტიკა">
+                <div class="about-badge">
+                    <span class="about-badge-num">15+</span>
+                    <span class="about-badge-text">წლის<br>გამოც.</span>
+                </div>
+            </div>
+
+            <div class="about-text" data-reveal>
+                <div>
+                    <span class="section-label">ჩვენ შესახებ</span>
+                    <h2 class="section-title about-title">საქართველოს <em>წამყვანი</em><br>დიზელ სერვისი</h2>
+                </div>
+                <p class="section-body">
+                    2009 წლიდან "სხილა დიზელ მოტორსი" ემსახურება დიზელის ძრავის მფლობელებს. ჩვენი სპეციალისტები გავლენ ევროპული ბრენდის სასერვისო ცენტრებში ტრენინგებს და ვფლობთ ავტორიზებული დიაგნოსტიკური პროგრამები.
+                </p>
+                <div class="about-pillars">
+                    <div class="pillar">
+                        <i class="fas fa-shield-alt pillar-icon"></i>
+                        <div>
+                            <h4>ევროპული სტანდარტი</h4>
+                            <p>Bosch, Delphi, Denso სასერვისო ინსტრუმენტები.</p>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <i class="fas fa-user-tie pillar-icon"></i>
+                        <div>
+                            <h4>გამოცდილი გუნდი</h4>
+                            <p>სერტიფიცირებული მექანიკოსები, სპეციალიზებული ბრენდებით.</p>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <i class="fas fa-bolt pillar-icon"></i>
+                        <div>
+                            <h4>სწრაფი სერვისი</h4>
+                            <p>დიაგნოსტიკა 30 წუთში. ძირითადი სამუშაო — 1 დღეში.</p>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <i class="fas fa-medal pillar-icon"></i>
+                        <div>
+                            <h4>გარანტია</h4>
+                            <p>ყველა სამუშაოს ხარისხზე ვაძლევთ გარანტიას წერილობით.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     BRANDS
+============================================= -->
+<section class="brands-section" data-reveal>
+    <div class="container">
+        <p class="brands-label">ვმუშაობთ ბრენდებზე</p>
+        <div class="brands-row">
+            <span class="brand-item">BMW</span>
+            <span class="brand-item">Mercedes-Benz</span>
+            <span class="brand-item">Volkswagen</span>
+            <span class="brand-item">Audi</span>
+            <span class="brand-item">Jeep</span>
+            <span class="brand-item">Land Rover</span>
+            <span class="brand-item">Volvo</span>
+            <span class="brand-item">Toyota</span>
+            <span class="brand-item">Hyundai</span>
+            <span class="brand-item">Kia</span>
+            <span class="brand-item">Peugeot</span>
+            <span class="brand-item">Renault</span>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     CTA BANNER
+============================================= -->
+<div class="cta-banner">
+    <div class="container cta-inner">
+        <div class="cta-text-group">
+            <p class="cta-headline">პრობლემა გაჩნდა?<br>დარეკეთ ახლავე.</p>
+            <p class="cta-sub">ვასაბუთებთ პრობლემას პირველი ვიზიტისთვის.</p>
+        </div>
+        <div class="cta-phone-big">593 00 42 00</div>
+        <a href="#contact" class="btn-cta-white">
+            <i class="fas fa-calendar-check"></i> სერვისის ჩაწერა
+        </a>
+    </div>
+</div>
+
+<!-- =============================================
+     CONTACT
+============================================= -->
+<section class="contact-section" id="contact">
+    <div class="container">
+        <div style="margin-bottom:4rem;" data-reveal>
+            <span class="section-label">კონტაქტი</span>
+            <h2 class="section-title">ჩაწეროთ <em>სერვისში</em></h2>
+        </div>
+        <div class="contact-layout">
+            <div class="contact-info" data-reveal>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div>
+                        <div class="contact-detail-label">ტელეფონი</div>
+                        <div class="contact-detail-value"><a href="tel:+995593004200">593 00 42 00</a></div>
+                    </div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <div class="contact-detail-label">მისამართი</div>
+                        <div class="contact-detail-value">ვასო გოძიაშვილის I შ. N2, თბილისი</div>
+                    </div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <div class="contact-detail-label">სამუშაო საათები</div>
+                        <div class="contact-detail-value" style="font-size:0.95rem; font-weight:600;">
+                            ორ — შაბ: 09:00 – 19:00
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div>
+                        <div class="contact-detail-label">WhatsApp / Viber</div>
+                        <div class="contact-detail-value"><a href="https://wa.me/995593004200">593 00 42 00</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-reveal>
+                <form class="contact-form" id="contact-form" action="https://formspree.io/f/myzjpoln" method="POST">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="cf-name">სახელი და გვარი</label>
+                            <input type="text" id="cf-name" name="name" placeholder="გიორგი ბერიძე" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="cf-phone">ტელეფონი</label>
+                            <input type="tel" id="cf-phone" name="phone" placeholder="5XX XXX XXX" required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="cf-service">სერვისი</label>
+                        <select id="cf-service" name="service">
+                            <option value="">აირჩიეთ სერვისი...</option>
+                            <option>ავტომობილის დიაგნოსტიკა</option>
+                            <option>ძრავის სერვისი</option>
+                            <option>ტურბოჩარჯერის სერვისი</option>
+                            <option>საწვავის სისტემის სერვისი</option>
+                            <option>სხვა</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="cf-car">ავტომობილი</label>
+                        <input type="text" id="cf-car" name="car" placeholder="მაგ: BMW 320d 2018">
+                    </div>
+                    <div class="form-field">
+                        <label for="cf-message">პრობლემის აღწერა</label>
+                        <textarea id="cf-message" name="message" placeholder="მოკლედ აღწერეთ სიმპტომები..."></textarea>
+                    </div>
+                    <p class="form-note">თქვენი მონაცემები გამოიყენება მხოლოდ სერვისის ჩაწერისთვის.</p>
+                    <button type="submit" class="btn btn-red" style="width:100%;justify-content:center;padding:1rem;">
+                        <span class="btn-text">გაგზავნა</span>
+                        <i class="fas fa-arrow-right btn-icon"></i>
+                    </button>
+                    <div class="form-status" id="form-status"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     FOOTER
+============================================= -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">სხილა <span>დიზელ</span></div>
+                <div class="footer-tagline">Diesel Motors // Tbilisi</div>
+                <p class="footer-desc">
+                    15 წლიანი გამოცდილება, ევროპული სტანდარტი — თქვენი ავტომობილისთვის.
+                </p>
+            </div>
+            <div>
+                <div class="footer-col-title">სერვისები</div>
+                <ul class="footer-links">
+                    <li><a href="#services">ავტომობილის დიაგნოსტიკა</a></li>
+                    <li><a href="#services">ძრავის სერვისი</a></li>
+                    <li><a href="#services">ტურბოჩარჯერის სერვისი</a></li>
+                    <li><a href="#services">საწვავის სისტემის სერვისი</a></li>
+                    <li><a href="#services">DPF / EGR სერვისი</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">კონტაქტი</div>
+                <ul class="footer-links">
+                    <li><a href="tel:+995593004200">593 00 42 00</a></li>
+                    <li><a href="#">ვასო გოძიაშვილის I შ. N2</a></li>
+                    <li><a href="#">თბილისი, საქართველო</a></li>
+                    <li><a href="https://wa.me/995593004200">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copy">&copy; <span id="year"></span> სხილა დიზელ მოტორსი. ყველა უფლება დაცულია.</p>
+            <div class="footer-socials">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/995593004200" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- YEAR ---
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // --- HEADER SCROLL ---
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // --- BURGER / MOBILE MENU ---
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('is-active');
+        mobileMenu.classList.toggle('is-open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            burger.classList.remove('is-active');
+            mobileMenu.classList.remove('is-open');
+        });
+    });
+
+    // --- REVEAL ON SCROLL ---
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                revealObs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => revealObs.observe(el));
+
+    // --- 3D CAROUSEL (HERO) ---
+    (() => {
+        const wrapper = document.querySelector('.carousel-wrapper');
+        const slides = gsap.utils.toArray('.slide');
+        if (!wrapper || slides.length === 0) return;
+        const radius = 320;
+        slides.forEach((s, i) => {
+            const angle = i * (360 / slides.length);
+            s.dataset.rotation = angle;
+            gsap.set(s, {
+                rotationY: angle,
+                transformOrigin: `50% 50% ${-radius}px`,
+                x: -s.offsetWidth / 2,
+                y: -s.offsetHeight / 2
+            });
+        });
+        const proxy = { value: 0 };
+        const auto = gsap.to(proxy, {
+            value: 360, duration: 34, ease: 'none', repeat: -1,
+            onUpdate: () => {
+                slides.forEach(s => {
+                    const a = parseFloat(s.dataset.rotation) + proxy.value;
+                    const rel = Math.abs(a % 360);
+                    const n = Math.min(rel, 360 - rel) / 180;
+                    gsap.set(s, {
+                        rotationY: a,
+                        filter: `brightness(${1 - n * 0.55})`,
+                        opacity: 1 - n * 0.45,
+                        scale: 1 - n * 0.28,
+                        zIndex: Math.round(100 * (1 - n))
+                    });
+                });
+            }
+        });
+        wrapper.addEventListener('mouseenter', () => gsap.to(auto, { timeScale: 0, duration: 0.5 }));
+        wrapper.addEventListener('mouseleave', () => gsap.to(auto, { timeScale: 1, duration: 0.5 }));
+    })();
+
+    // --- UNDER THE LOUPE ---
+    (() => {
+        const explorer = document.querySelector('.loupe-layout');
+        if (!explorer) return;
+        const triggers = explorer.querySelectorAll('.hotspot-trigger');
+        const mainImg = document.getElementById('main-loupe-image');
+        const loupe = document.getElementById('digital-loupe');
+        const isMobile = window.innerWidth <= 768;
+
+        if (mainImg && loupe) loupe.style.backgroundImage = `url(${mainImg.src})`;
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                if (trigger.classList.contains('is-active')) return;
+                triggers.forEach(t => t.classList.remove('is-active'));
+                trigger.classList.add('is-active');
+                mainImg.classList.add('is-dimmed');
+                gsap.to(loupe, {
+                    left: trigger.dataset.x,
+                    top: trigger.dataset.y,
+                    xPercent: -50, yPercent: -50,
+                    opacity: 1, scale: 1,
+                    duration: 1.1, ease: 'power3.out',
+                    backgroundPosition: `${trigger.dataset.x} ${trigger.dataset.y}`
+                });
+            });
+        });
+
+        const loupeObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    loupeObs.unobserve(explorer);
+                    if (isMobile) {
+                        const first = triggers[0];
+                        if (!first) return;
+                        const tl = gsap.timeline();
+                        tl.to(first, { borderLeftColor: 'var(--red)', backgroundColor: 'rgba(200,24,26,0.08)', duration: 0.5 });
+                        tl.add(() => mainImg.classList.add('is-dimmed'), '<');
+                        tl.to(loupe, {
+                            opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out',
+                            left: first.dataset.x, top: first.dataset.y,
+                            xPercent: -50, yPercent: -50,
+                            backgroundPosition: `${first.dataset.x} ${first.dataset.y}`
+                        }, '<');
+                        tl.to({}, { duration: 2 });
+                        tl.add(() => mainImg.classList.remove('is-dimmed'));
+                        tl.to(loupe, { opacity: 0, scale: 0.5, duration: 0.7, ease: 'power3.inOut' }, '<');
+                        tl.set(first, { clearProps: 'all' });
+                    } else {
+                        gsap.fromTo(triggers,
+                            { opacity: 0, x: -20 },
+                            { opacity: 1, x: 0, duration: 0.7, stagger: 0.18, ease: 'power2.out' }
+                        );
+                    }
+                }
+            });
+        }, { threshold: 0.4 });
+        loupeObs.observe(explorer);
+    })();
+
+    // --- CONTACT FORM ---
+    (() => {
+        const form = document.getElementById('contact-form');
+        if (!form) return;
+        const btn = form.querySelector('button[type="submit"]');
+        const btnText = form.querySelector('.btn-text');
+        const btnIcon = form.querySelector('.btn-icon');
+        const status = document.getElementById('form-status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            btnText.textContent = 'იგზავნება...';
+            btnIcon.className = 'fas fa-spinner fa-spin btn-icon';
+            status.className = 'form-status';
+
+            const data = new FormData(form);
+            try {
+                const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+                if (res.ok) {
+                    btnText.textContent = 'გაგზავნილია';
+                    btnIcon.className = 'fas fa-check btn-icon';
+                    status.textContent = 'გმადლობთ! მალე დაგიკავშირდებით.';
+                    status.className = 'form-status success';
+                    form.reset();
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btnText.textContent = 'გაგზავნა';
+                        btnIcon.className = 'fas fa-arrow-right btn-icon';
+                        status.className = 'form-status';
+                    }, 4000);
+                } else { throw new Error(); }
+            } catch {
+                btn.disabled = false;
+                btnText.textContent = 'გაგზავნა';
+                btnIcon.className = 'fas fa-arrow-right btn-icon';
+                status.textContent = 'შეცდომა. სცადეთ ხელახლა ან დარეკეთ.';
+                status.className = 'form-status error';
+            }
+        });
+    })();
+
+});
+</script>
+</body>
+</html>
