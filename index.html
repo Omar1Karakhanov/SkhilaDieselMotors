@@ -268,7 +268,11 @@
         .hero-content {
             position: relative;
             z-index: 10;
-            padding: 4rem 0 2rem;
+            padding: 2.5rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
         .hero-eyebrow {
             font-family: var(--font-head);
@@ -280,6 +284,7 @@
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.8rem;
             opacity: 0;
             animation: fadeUp 0.8s 0.3s var(--ease-out) forwards;
@@ -299,12 +304,15 @@
             opacity: 0;
             animation: fadeUp 0.9s 0.5s var(--ease-out) forwards;
         }
-        .hero-title .line-red { color: var(--red); display: block; }
+        .hero-title .line-red {
+            color: var(--red);
+            display: block;
+        }
         .hero-subtitle {
             font-size: 1.05rem;
             color: var(--gray-300);
             max-width: 48ch;
-            margin-bottom: 2.5rem;
+            margin: 0 auto 3rem;
             line-height: 1.8;
             opacity: 0;
             animation: fadeUp 0.9s 0.7s var(--ease-out) forwards;
@@ -313,17 +321,23 @@
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+            justify-content: center;
             opacity: 0;
             animation: fadeUp 0.9s 0.9s var(--ease-out) forwards;
         }
         .hero-stats {
             display: flex;
+            justify-content: center;
             gap: 3rem;
-            margin-top: 4rem;
-            padding-top: 3rem;
+            margin-top: 3.5rem;
+            padding-top: 2.5rem;
             border-top: 1px solid rgba(255,255,255,0.07);
             opacity: 0;
             animation: fadeUp 0.9s 1.1s var(--ease-out) forwards;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
         }
         .hero-stat-num {
             font-family: var(--font-display);
@@ -340,29 +354,35 @@
             margin-top: 0.3rem;
         }
 
-        /* Carousel showcase (kept from original) */
+        /* Carousel showcase */
         #showcase-container {
             width: 100%;
-            height: 380px;
-            position: absolute;
-            bottom: 0; left: 0;
-            pointer-events: none;
+            max-width: 900px;
+            height: 320px;
+            position: relative;
+            margin: 2.5rem auto 0;
+            --slide-size: 600px;
+            --carousel-radius: 320px;
         }
         .carousel-wrapper { position: absolute; width: 100%; height: 100%; perspective: 2000px; }
-        .carousel { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; pointer-events: none; }
+        .carousel { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; }
         .slide {
             position: absolute;
             top: 50%; left: 50%;
-            width: 260px; height: 260px;
+            width: var(--slide-size, 600px);
+            height: var(--slide-size, 600px);
             transform-origin: center center;
-            pointer-events: auto;
-            cursor: grab;
+            cursor: pointer;
         }
         .slide:active { cursor: grabbing; }
         .slide img {
             width: 100%; height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+            transition: filter 0.3s ease;
+        }
+        .slide:hover img {
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(200,24,26,0.45));
         }
         /* Shimmer */
         .slide::after {
@@ -373,6 +393,7 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent);
             transform: skewX(-25deg);
             transition: left 0.7s ease;
+            pointer-events: none;
         }
         .slide:hover::after { left: 150%; }
 
@@ -1043,7 +1064,33 @@
             .main-nav, .header-phone { display: none; }
             .burger { display: flex; }
             .mobile-menu { display: flex; }
-            .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+
+            /* --- HERO: tighten vertical rhythm --- */
+            .hero-content { padding: 1.75rem 0 1.5rem; }
+            .hero-eyebrow { font-size: 0.66rem; gap: 0.6rem; margin-bottom: 1.1rem; }
+            .hero-eyebrow::before { width: 22px; }
+            .hero-title { margin-bottom: 0.9rem; }
+            .hero-subtitle { margin: 0 auto 0.8rem; font-size: 0.95rem; max-width: 36ch; }
+
+            /* --- HERO: carousel scaled + radius matched --- */
+            #showcase-container {
+                height: 230px;
+                margin-top: 0.4rem;
+                --slide-size: 210px;
+                --carousel-radius: 185px;
+            }
+
+            /* --- HERO: stats as a clean 2x2 grid --- */
+            .hero-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem 1rem;
+                margin-top: 1rem;
+                padding-top: 1.4rem;
+            }
+            .hero-stat-num { font-size: 2.3rem; }
+            .hero-stat-label { font-size: 0.7rem; }
+
             .services-intro { grid-template-columns: 1fr; gap: 2rem; }
             .loupe-layout { grid-template-columns: 1fr; gap: 2.5rem; }
             .loupe-image-wrapper { height: 50vh; min-height: 320px; }
@@ -1054,9 +1101,25 @@
             .footer-bottom { flex-direction: column; text-align: center; }
         }
         @media (max-width: 480px) {
-            :root { --header-h: 64px; }
+            :root { --header-h: 60px; }
             .hero-actions { flex-direction: column; }
             .hero-actions .btn { justify-content: center; }
+
+            .hero-content { padding: 1.5rem 0 1.25rem; }
+            .hero-title { font-size: clamp(2.6rem, 13vw, 3.4rem); margin-bottom: 0.75rem; }
+            .hero-subtitle { font-size: 0.88rem; margin-bottom: 0.7rem; max-width: 30ch; }
+
+            #showcase-container {
+                height: 190px;
+                margin-top: 0.3rem;
+                --slide-size: 165px;
+                --carousel-radius: 145px;
+            }
+
+            .hero-stats { gap: 1.1rem 0.75rem; margin-top: 0.8rem; padding-top: 1.1rem; }
+            .hero-stat-num { font-size: 1.9rem; }
+            .hero-stat-label { font-size: 0.62rem; letter-spacing: 0.06em; }
+
             .symptoms-grid { grid-template-columns: 1fr; }
             .services-grid { grid-template-columns: 1fr; }
         }
@@ -1118,45 +1181,42 @@
             ძრავი, ტურბო, საწვავის სისტემა &mdash; სრული ციკლის სერვისი
             ევროპული სტანდარტის აღჭურვილობით.
         </p>
-        <div class="hero-actions">
-            <a href="#contact" class="btn btn-red">
-                <i class="fas fa-wrench"></i> ჩაწეროთ სერვისში
-            </a>
-            <a href="tel:+995593004200" class="btn btn-outline">
-                <i class="fas fa-phone-alt"></i> 593 00 42 00
-            </a>
+
+        <div id="showcase-container">
+            <div class="carousel-wrapper">
+                <div class="carousel" id="carousel">
+                    <div class="slide" data-target="#services-diagnostics">
+                        <img src="https://www.mannautoservices.co.uk/wp-content/uploads/2025/01/AdobeStock_46733723.jpg" alt="ავტომობილის დიაგნოსტირება">
+                    </div>
+                    <div class="slide" data-target="#services-engine">
+                        <img src="https://media.istockphoto.com/id/490048372/photo/hands-of-car-mechanic.jpg?s=612x612&w=0&k=20&c=ZL8UvBapRPfllJKDPdQOG96bsi51kN8H50QwAIGaXoI=" alt="ძრავის სერვისი">
+                    </div>
+                    <div class="slide" data-target="#services-turbo">
+                        <img src="https://www.wartsila.com/images/default-source/service-catalogue/engine-services-4-stroke/turbocharger-services-open-graph.jpg?sfvrsn=53fb1b43_1" alt="ტურბოჩარჯერის სერვისი">
+                    </div>
+                    <div class="slide" data-target="#services-fuel">
+                        <img src="https://www.vipauto.com/wp-content/uploads/2019/04/fuel-systems-services-edit-web.jpg" alt="საწვავის სისტემის სერვისი">
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="hero-stats">
-            <div>
+            <div class="hero-stat">
                 <div class="hero-stat-num">15<span>+</span></div>
                 <div class="hero-stat-label">წლის გამოცდილება</div>
             </div>
-            <div>
-                <div class="hero-stat-num">2500<span>+</span></div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">5000<span>+</span></div>
                 <div class="hero-stat-label">შესრულებული სამუშაო</div>
             </div>
-            <div>
-                <div class="hero-stat-num">98<span>%</span></div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">99.99<span>%</span></div>
                 <div class="hero-stat-label">კმაყოფილი კლიენტი</div>
             </div>
-            <div>
+            <div class="hero-stat">
                 <div class="hero-stat-num">5</div>
                 <div class="hero-stat-label">ბრენდის სპეციალისტი</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3D Carousel — ENGINE PARTS (replace src when photos available) -->
-    <div id="showcase-container">
-        <div class="carousel-wrapper">
-            <div class="carousel" id="carousel">
-                <!-- Replace these Unsplash sources with your own photos -->
-                <div class="slide"><img src="https://agro-trade.ge/wp-content/uploads/2022/03/450-450.jpg" alt="Diesel Engine"></div>
-                <div class="slide"><img src="https://worldsport.ge/img/articles/3ef1c896067473c055858a20ab94eb37.jpg" alt="Turbocharger"></div>
-                <div class="slide"><img src="https://bauma.ge/files/products/jhxyfEwpKojr5iu5Czaw3oVwPRljiy.JPG" alt="Engine Service"></div>
-                <div class="slide"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiq1VO4yG-8iWVyo8jvMVb8nYvhScJtwz_unVWleWwOqD8-ZFb_-aXSockImRSYDGsz0V7ke1vec5rM-FMW47W7GDBay3kGw7gZHi4feCp8pyeB1-OXDpAxWEqd8Be2159VuwH_1Zr7U7vQ/s1600/%E1%83%93%E1%83%98%E1%83%96%E1%83%94%E1%83%9A%E1%83%98%E1%83%A1+%E1%83%AB%E1%83%A0%E1%83%90%E1%83%95%E1%83%90.jpg" alt="Workshop"></div>
-                <div class="slide"><img src="https://gottuned.com/wp-content/uploads/2020/04/gottuned_bmw_20t_b48b20_1.jpg" alt="Diagnostic Equipment"></div>
-                <div class="slide"><img src="https://static.tnet.ge/myparts/photos/thumbs/0312/12841770_1.jpg" alt="Fuel System"></div>
             </div>
         </div>
     </div>
@@ -1253,7 +1313,7 @@
 
         <div class="services-grid" data-reveal>
             <!-- Service 1 -->
-            <div class="service-card">
+            <div class="service-card" id="services-diagnostics">
                 <span class="service-number">01</span>
                 <div class="service-icon-wrap"><i class="fas fa-laptop-code"></i></div>
                 <h3>ავტომობილის დიაგნოსტირება</h3>
@@ -1266,7 +1326,7 @@
                 </ul>
             </div>
             <!-- Service 2 -->
-            <div class="service-card">
+            <div class="service-card" id="services-engine">
                 <span class="service-number">02</span>
                 <div class="service-icon-wrap"><i class="fas fa-cogs"></i></div>
                 <h3>ძრავის სერვისი</h3>
@@ -1279,7 +1339,7 @@
                 </ul>
             </div>
             <!-- Service 3 -->
-            <div class="service-card">
+            <div class="service-card" id="services-turbo">
                 <span class="service-number">03</span>
                 <div class="service-icon-wrap"><i class="fas fa-wind"></i></div>
                 <h3>ტურბოჩარჯერის სერვისი</h3>
@@ -1292,7 +1352,7 @@
                 </ul>
             </div>
             <!-- Service 4 -->
-            <div class="service-card">
+            <div class="service-card" id="services-fuel">
                 <span class="service-number">04</span>
                 <div class="service-icon-wrap"><i class="fas fa-gas-pump"></i></div>
                 <h3>საწვავის სისტემის სერვისი</h3>
@@ -1639,22 +1699,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3D CAROUSEL (HERO) ---
     (() => {
         const wrapper = document.querySelector('.carousel-wrapper');
+        const container = document.getElementById('showcase-container');
         const slides = gsap.utils.toArray('.slide');
-        if (!wrapper || slides.length === 0) return;
-        const radius = 320;
+        if (!wrapper || !container || slides.length === 0) return;
+
+        const getRadius = () => {
+            const cssVal = getComputedStyle(container).getPropertyValue('--carousel-radius').trim();
+            const parsed = parseFloat(cssVal);
+            return Number.isFinite(parsed) ? parsed : 320;
+        };
+
         slides.forEach((s, i) => {
             const angle = i * (360 / slides.length);
             s.dataset.rotation = angle;
-            gsap.set(s, {
-                rotationY: angle,
-                transformOrigin: `50% 50% ${-radius}px`,
-                x: -s.offsetWidth / 2,
-                y: -s.offsetHeight / 2
-            });
         });
+
+        const applyGeometry = () => {
+            const radius = getRadius();
+            slides.forEach(s => {
+                gsap.set(s, {
+                    rotationY: parseFloat(s.dataset.rotation),
+                    transformOrigin: `50% 50% ${-radius}px`,
+                    x: -s.offsetWidth / 2,
+                    y: -s.offsetHeight / 2
+                });
+            });
+        };
+        applyGeometry();
+
         const proxy = { value: 0 };
         const auto = gsap.to(proxy, {
-            value: 360, duration: 34, ease: 'none', repeat: -1,
+            value: 360, duration: 18, ease: 'none', repeat: -1,
             onUpdate: () => {
                 slides.forEach(s => {
                     const a = parseFloat(s.dataset.rotation) + proxy.value;
@@ -1672,6 +1747,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         wrapper.addEventListener('mouseenter', () => gsap.to(auto, { timeScale: 0, duration: 0.5 }));
         wrapper.addEventListener('mouseleave', () => gsap.to(auto, { timeScale: 1, duration: 0.5 }));
+
+        // Recompute geometry on resize/orientation change so breakpoint
+        // changes (e.g. rotating a phone) don't leave slides mis-scaled.
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(applyGeometry, 150);
+        }, { passive: true });
+
+        // --- Click-to-navigate: smooth scroll to matching service section ---
+        slides.forEach(slide => {
+            slide.addEventListener('click', () => {
+                const targetSelector = slide.dataset.target;
+                if (!targetSelector) return;
+                const targetEl = document.querySelector(targetSelector);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
     })();
 
     // --- UNDER THE LOUPE ---
