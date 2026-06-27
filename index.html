@@ -238,7 +238,6 @@
             inset: 0;
             background: linear-gradient(135deg, #050d1a 0%, #0d1b35 50%, #0e1f3a 100%);
         }
-        /* Subtle grid texture */
         .hero-bg::after {
             content: '';
             position: absolute;
@@ -336,9 +335,7 @@
             animation: fadeUp 0.9s 1.1s var(--ease-out) forwards;
             flex-wrap: wrap;
         }
-        .hero-stat {
-            text-align: center;
-        }
+        .hero-stat { text-align: center; }
         .hero-stat-num {
             font-family: var(--font-display);
             font-size: 2.8rem;
@@ -354,52 +351,203 @@
             margin-top: 0.3rem;
         }
 
-        /* Carousel showcase */
+        /* =============================================
+           CAROUSEL
+           FIX: previously --slide-size (600px) was almost
+           double the --carousel-radius (320px), so the
+           images' bounding boxes overlapped heavily while
+           rotating and looked "glued together". The radius
+           now comfortably exceeds half the slide size at
+           every breakpoint, and slide-size itself is reduced
+           on desktop so there's visible air between frames.
+        ============================================= */
         #showcase-container {
             width: 100%;
             max-width: 900px;
-            height: 320px;
+            height: 360px;
             position: relative;
             margin: 2.5rem auto 0;
-            --slide-size: 600px;
-            --carousel-radius: 320px;
+            --slide-size: 380px;
+            --carousel-radius: 480px;
         }
         .carousel-wrapper { position: absolute; width: 100%; height: 100%; perspective: 2000px; }
         .carousel { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; }
+
+        /* Slide: pointer cursor to signal clickability */
         .slide {
             position: absolute;
             top: 50%; left: 50%;
-            width: var(--slide-size, 600px);
-            height: var(--slide-size, 600px);
+            width: var(--slide-size, 480px);
+            height: var(--slide-size, 320px);
             transform-origin: center center;
             cursor: pointer;
+            /* Keyboard focus ring */
+            outline: none;
+            border-radius: 4px;
         }
-        .slide:active { cursor: grabbing; }
+
+
+
+        
+        /* Visible focus ring for keyboard navigation */
+        .slide:focus-visible {
+            box-shadow: 0 0 0 3px var(--red), 0 0 0 5px rgba(200,24,26,0.3);
+        }
         .slide img {
             width: 100%; height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
             transition: filter 0.3s ease;
+            /* Images are decorative; alt is on the wrapper */
+            pointer-events: none;
+            user-select: none;
         }
         .slide:hover img {
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(200,24,26,0.45));
         }
-        /* Shimmer */
-        .slide::after {
+
+        /* ── Slide popup CTA button ────────────────────────────────────────────
+           Appears when a slide enters the front-face zone.
+           Positioned just below the carousel's visible area.
+        ──────────────────────────────────────────────────────────────────── */
+
+        /* Shared popup container — sits in normal flow below the carousel */
+        #slide-popup {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            /* Reserve space so layout doesn't jump; the button slides in/out */
+            min-height: 3.2rem;
+            margin-top: 0.6rem;
+            pointer-events: none; /* clicks pass through when hidden */
+        }
+
+        .slide-popup-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.8rem;
+            font-family: var(--font-head);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--red);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            pointer-events: auto;
+            /* Start hidden — JS drives GSAP transitions */
+            opacity: 0;
+            transform: translateY(14px) scale(0.94);
+            will-change: opacity, transform;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 28px rgba(200,24,26,0.0);
+            transition: box-shadow 0.25s ease;
+        }
+        .slide-popup-btn:hover {
+            box-shadow: 0 10px 36px rgba(200,24,26,0.55);
+            background: var(--red-dark);
+        }
+        /* Sheen sweep on hover */
+        .slide-popup-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%;
-            width: 70%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent);
-            transform: skewX(-25deg);
-            transition: left 0.7s ease;
+            top: 0; left: -110%;
+            width: 80%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent);
+            transform: skewX(-20deg);
+            transition: left 0.55s ease;
             pointer-events: none;
         }
-        .slide:hover::after { left: 150%; }
+        .slide-popup-btn:hover::before { left: 130%; }
+
+        /* Arrow icon — springs forward on hover */
+        .slide-popup-btn .popup-arrow {
+            display: inline-flex;
+            transition: transform 0.3s var(--ease-out);
+        }
+        .slide-popup-btn:hover .popup-arrow {
+            transform: translateX(5px);
+        }
+
+        /* Red dot pulse beside the label */
+        .slide-popup-btn .popup-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.85);
+            flex-shrink: 0;
+            animation: popupDotPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes popupDotPulse {
+            0%, 100% { opacity: 1;   transform: scale(1); }
+            50%       { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        /* Reduced-motion: no pulse, no sheen sweep */
+        @media (prefers-reduced-motion: reduce) {
+            .slide-popup-btn .popup-dot { animation: none; }
+            .slide-popup-btn::before    { display: none; }
+        }
+
+        /* Shimmer moved to popup button */
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =============================================
+           SERVICE CARD HIGHLIGHT ANIMATION
+           Triggered when navigating from the carousel.
+           Uses a CSS custom property + keyframes approach
+           so it works independently of GSAP timing.
+        ============================================= */
+        @keyframes serviceHighlightGlow {
+            0%   { box-shadow: none; }
+            15%  { box-shadow: 0 0 0 2px var(--red), 0 0 32px rgba(200,24,26,0.5), inset 0 0 24px rgba(200,24,26,0.08); }
+            60%  { box-shadow: 0 0 0 2px rgba(200,24,26,0.6), 0 0 20px rgba(200,24,26,0.3), inset 0 0 14px rgba(200,24,26,0.04); }
+            100% { box-shadow: none; }
+        }
+        @keyframes serviceHighlightScale {
+            0%   { transform: scale(1) translateY(0); }
+            12%  { transform: scale(1.025) translateY(-4px); }
+            45%  { transform: scale(1.012) translateY(-2px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+        @keyframes serviceHighlightBg {
+            0%   { background-color: var(--navy-mid); }
+            15%  { background-color: rgba(200,24,26,0.13); }
+            70%  { background-color: rgba(200,24,26,0.04); }
+            100% { background-color: var(--navy-mid); }
+        }
+        @keyframes serviceHighlightUnderline {
+            0%   { transform: scaleX(0); }
+            20%  { transform: scaleX(1); }
+            75%  { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
+
+        /* Applied via JS; removed after animation completes */
+        .service-card.is-highlighted {
+            animation:
+                serviceHighlightGlow  2.6s var(--ease-out) forwards,
+                serviceHighlightScale 2.6s var(--ease-out) forwards,
+                serviceHighlightBg    2.6s var(--ease-out) forwards;
+            /* Prevent layout thrash during scale */
+            will-change: transform, box-shadow, background-color;
+            position: relative;
+            z-index: 10;
+        }
+        /* Underline bar animation */
+        .service-card.is-highlighted::before {
+            animation: serviceHighlightUnderline 2.6s var(--ease-out) forwards !important;
+            transform-origin: left !important;
         }
 
         /* =============================================
@@ -599,7 +747,7 @@
         }
 
         /* =============================================
-           UNDER THE LOUPE (KEPT + RESTYLED)
+           UNDER THE LOUPE
         ============================================= */
         .loupe-section {
             padding: 8rem 0;
@@ -632,6 +780,14 @@
             object-fit: cover;
             transition: filter 0.8s ease, transform 0.8s ease;
         }
+
+        .loupe-image-wrapper,
+.main-loupe-image {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
         .main-loupe-image.is-dimmed {
             filter: brightness(0.35) blur(5px);
             transform: scale(0.96);
@@ -1059,28 +1215,31 @@
             .about-image-mosaic { height: 380px; }
             .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
+
+            #showcase-container {
+                height: 300px;
+                --slide-size: 300px;
+                --carousel-radius: 380px;
+            }
         }
         @media (max-width: 768px) {
             .main-nav, .header-phone { display: none; }
             .burger { display: flex; }
             .mobile-menu { display: flex; }
 
-            /* --- HERO: tighten vertical rhythm --- */
             .hero-content { padding: 1.75rem 0 1.5rem; }
             .hero-eyebrow { font-size: 0.66rem; gap: 0.6rem; margin-bottom: 1.1rem; }
             .hero-eyebrow::before { width: 22px; }
             .hero-title { margin-bottom: 0.9rem; }
             .hero-subtitle { margin: 0 auto 0.8rem; font-size: 0.95rem; max-width: 36ch; }
 
-            /* --- HERO: carousel scaled + radius matched --- */
             #showcase-container {
-                height: 230px;
+                height: 240px;
                 margin-top: 0.4rem;
-                --slide-size: 210px;
-                --carousel-radius: 185px;
+                --slide-size: 170px;
+                --carousel-radius: 230px;
             }
 
-            /* --- HERO: stats as a clean 2x2 grid --- */
             .hero-stats {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -1110,10 +1269,10 @@
             .hero-subtitle { font-size: 0.88rem; margin-bottom: 0.7rem; max-width: 30ch; }
 
             #showcase-container {
-                height: 190px;
+                height: 195px;
                 margin-top: 0.3rem;
-                --slide-size: 165px;
-                --carousel-radius: 145px;
+                --slide-size: 135px;
+                --carousel-radius: 185px;
             }
 
             .hero-stats { gap: 1.1rem 0.75rem; margin-top: 0.8rem; padding-top: 1.1rem; }
@@ -1123,39 +1282,46 @@
             .symptoms-grid { grid-template-columns: 1fr; }
             .services-grid { grid-template-columns: 1fr; }
         }
+
+        /* Respect reduced-motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .service-card.is-highlighted {
+                animation: none !important;
+                box-shadow: 0 0 0 2px var(--red) !important;
+                transition: box-shadow 0.3s ease;
+            }
+            .service-card.is-highlighted::before {
+                animation: none !important;
+                transform: scaleX(1) !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- =============================================
-     HEADER
-============================================= -->
+<!-- HEADER -->
 <header class="site-header" id="site-header">
     <a href="#" class="site-logo">
         <span class="site-logo-main">სხილა <span class="site-logo-accent">დიზელ</span></span>
         <span class="site-logo-sub">Diesel Motors &nbsp;// Georgian Standard</span>
     </a>
-
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Primary navigation">
         <a href="#services" class="nav-link">სერვისი</a>
         <a href="#diagnostics" class="nav-link">დიაგნოსტიკა</a>
         <a href="#about" class="nav-link">ჩვენ შესახებ</a>
         <a href="#contact" class="nav-link">კონტაქტი</a>
     </nav>
-
     <div class="header-cta">
         <a href="tel:+995593004200" class="header-phone">
-            <i class="fas fa-phone-alt"></i> 593 00 42 00
+            <i class="fas fa-phone-alt" aria-hidden="true"></i> 593 00 42 00
         </a>
-        <a href="#contact" class="btn btn-red" style="display:none;" id="header-cta-btn">დარეკვა</a>
     </div>
-
-    <div class="burger" id="burger">
+    <button class="burger" id="burger" aria-label="მენიუ" aria-expanded="false" aria-controls="mobile-menu">
         <span></span><span></span><span></span>
-    </div>
+    </button>
 </header>
 
-<nav class="mobile-menu" id="mobile-menu">
+<nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
     <a href="#services" class="nav-link">სერვისი</a>
     <a href="#diagnostics" class="nav-link">დიაგნოსტიკა</a>
     <a href="#about" class="nav-link">ჩვენ შესახებ</a>
@@ -1163,13 +1329,11 @@
     <a href="tel:+995593004200" class="btn btn-red" style="margin-top:1rem;">593 00 42 00</a>
 </nav>
 
-<!-- =============================================
-     HERO
-============================================= -->
+<!-- HERO -->
 <section class="hero-section" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-accent-line"></div>
-    <div class="hero-glow"></div>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-accent-line" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
 
     <div class="container hero-content">
         <p class="hero-eyebrow">თბილისი, საქართველო &mdash; 15+ წლიანი გამოცდილება</p>
@@ -1182,26 +1346,80 @@
             ევროპული სტანდარტის აღჭურვილობით.
         </p>
 
-        <div id="showcase-container">
+        <!--
+            CAROUSEL
+            Each .slide has:
+              - data-target: CSS selector of the destination service card
+              - data-label:  Short Georgian label rendered as a tooltip
+              - role="button" + tabindex="0" for full keyboard accessibility
+              - aria-label describes the action and destination
+        -->
+        <div id="showcase-container" aria-label="სერვისების გალერეა">
             <div class="carousel-wrapper">
                 <div class="carousel" id="carousel">
-                    <div class="slide" data-target="#services-diagnostics">
-                        <img src="https://www.mannautoservices.co.uk/wp-content/uploads/2025/01/AdobeStock_46733723.jpg" alt="ავტომობილის დიაგნოსტირება">
+
+                    <div class="slide"
+                         data-target="#services-diagnostics"
+                         data-label="დიაგნოსტიკა"
+                         role="button"
+                         tabindex="0"
+                         aria-label="ავტომობილის დიაგნოსტირება — სერვისზე გადასვლა">
+                        <img src="https://www.mannautoservices.co.uk/wp-content/uploads/2025/01/AdobeStock_46733723.jpg"
+                             alt="ავტომობილის დიაგნოსტირება"
+                             loading="lazy">
                     </div>
-                    <div class="slide" data-target="#services-engine">
-                        <img src="https://media.istockphoto.com/id/490048372/photo/hands-of-car-mechanic.jpg?s=612x612&w=0&k=20&c=ZL8UvBapRPfllJKDPdQOG96bsi51kN8H50QwAIGaXoI=" alt="ძრავის სერვისი">
+
+                    <div class="slide"
+                         data-target="#services-engine"
+                         data-label="ძრავის სერვისი"
+                         role="button"
+                         tabindex="0"
+                         aria-label="ძრავის სერვისი — სერვისზე გადასვლა">
+                        <img src="https://media.istockphoto.com/id/490048372/photo/hands-of-car-mechanic.jpg?s=612x612&w=0&k=20&c=ZL8UvBapRPfllJKDPdQOG96bsi51kN8H50QwAIGaXoI="
+                             alt="ძრავის სერვისი"
+                             loading="lazy">
                     </div>
-                    <div class="slide" data-target="#services-turbo">
-                        <img src="https://www.wartsila.com/images/default-source/service-catalogue/engine-services-4-stroke/turbocharger-services-open-graph.jpg?sfvrsn=53fb1b43_1" alt="ტურბოჩარჯერის სერვისი">
+
+                    <div class="slide"
+                         data-target="#services-turbo"
+                         data-label="ტურბო სერვისი"
+                         role="button"
+                         tabindex="0"
+                         aria-label="ტურბოჩარჯერის სერვისი — სერვისზე გადასვლა">
+                        <img src="https://www.wartsila.com/images/default-source/service-catalogue/engine-services-4-stroke/turbocharger-services-open-graph.jpg?sfvrsn=53fb1b43_1"
+                             alt="ტურბოჩარჯერის სერვისი"
+                             loading="lazy">
                     </div>
-                    <div class="slide" data-target="#services-fuel">
-                        <img src="https://www.vipauto.com/wp-content/uploads/2019/04/fuel-systems-services-edit-web.jpg" alt="საწვავის სისტემის სერვისი">
+
+                    <div class="slide"
+                         data-target="#services-fuel"
+                         data-label="საწვავის სისტემა"
+                         role="button"
+                         tabindex="0"
+                         aria-label="საწვავის სისტემის სერვისი — სერვისზე გადასვლა">
+                        <img src="https://www.vipauto.com/wp-content/uploads/2019/04/fuel-systems-services-edit-web.jpg"
+                             alt="საწვავის სისტემის სერვისი"
+                             loading="lazy">
                     </div>
+
                 </div>
             </div>
         </div>
 
-        <div class="hero-stats">
+        <!-- Slide popup CTA — controlled entirely by JS -->
+        <div id="slide-popup" aria-live="polite">
+            <button class="slide-popup-btn" id="slide-popup-btn" type="button" aria-label="">
+                <span class="popup-dot" aria-hidden="true"></span>
+                <span class="popup-text" id="slide-popup-text"></span>
+                <span class="popup-arrow" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </button>
+        </div>
+
+        <div class="hero-stats" aria-label="სტატისტიკა">
             <div class="hero-stat">
                 <div class="hero-stat-num">15<span>+</span></div>
                 <div class="hero-stat-label">წლის გამოცდილება</div>
@@ -1222,10 +1440,8 @@
     </div>
 </section>
 
-<!-- =============================================
-     MARQUEE
-============================================= -->
-<div class="marquee-strip">
+<!-- MARQUEE -->
+<div class="marquee-strip" aria-hidden="true">
     <div class="marquee-track">
         <span class="marquee-item">ძრავის სერვისი</span>
         <span class="marquee-item">ტურბოჩარჯერის შეკეთება</span>
@@ -1243,59 +1459,109 @@
         <span class="marquee-item">BMW / Mercedes / VW / Jeep / Land Rover</span>
     </div>
 </div>
-
-<!-- =============================================
-     SYMPTOMS / PAIN POINTS
-============================================= -->
+<!-- SYMPTOMS -->
 <section class="symptoms-section">
     <div class="container">
         <div class="symptoms-header" data-reveal>
-            <span class="section-label">იცანით პრობლემა</span>
-            <h2 class="section-title" style="text-align:center;">თქვენი ავტომობილი <em>გამოგიცხადეთ</em> სიგნალი?</h2>
+            <span class="section-label">იცანით პრობლემა დროულად</span>
+
+            <h2 class="section-title" style="text-align:center;">
+                თქვენს ავტომობილს <em>უჩვეულო სიმპტომები აქვს?</em>
+            </h2>
+
             <p class="section-body" style="text-align:center;margin:1rem auto 0;">
-                ეს სიმპტომები ხშირად ნიშნავს, რომ ძრავი, ტურბო ან საწვავის სისტემა ყურადღებას საჭიროებს. ნუ დაელოდებით პრობლემის გაძლიერებას.
+                ეს ნიშნები ხშირად მიუთითებს, რომ ძრავი, ტურბო ან საწვავის სისტემა ტექნიკურ ყურადღებას საჭიროებს.
+                ნუ დაელოდებით, სანამ პრობლემა გაუარესდება.
             </p>
         </div>
+
         <div class="symptoms-grid">
+
             <div class="symptom-card" data-reveal data-reveal-delay="1">
-                <div class="symptom-icon"><i class="fas fa-smog"></i></div>
-                <div class="symptom-text"><strong>შავი კვამლი გამონაბოლქვიდან</strong>საწვავის არასრული წვა, ინჟექტორის ან ტურბოს პრობლემა.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-smog" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>შავი კვამლი გამონაბოლქვიდან</strong>
+                    საწვავი სრულად ვერ იწვის — მიზეზი შესაძლოა ინჟექტორების, ტურბოს ან საწვავის სისტემის გაუმართაობა იყოს.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="2">
-                <div class="symptom-icon"><i class="fas fa-clipboard-check"></i></div>
-                <div class="symptom-text"><strong>ვერ გადის ტექდათვალიერებას</strong>სტანდარტს ვერ აკმაყოფილებს &mdash; ვასწორებთ სწრაფად.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>ავტომობილი ვერ გადის ტექნიკურ დათვალიერებას</strong>
+                    გამონაბოლქვი სტანდარტებს არ აკმაყოფილებს — ზუსტად ვადგენთ მიზეზს და პროფესიონალურად ვაგვარებთ პრობლემას.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="3">
-                <div class="symptom-icon"><i class="fas fa-oil-can"></i></div>
-                <div class="symptom-text"><strong>ზეთის გაზრდილი მოხმარება</strong>ძრავის ცვეთა ან ტურბოს ლუქი &mdash; დროული დიაგნოსტიკა იცავს ძრავს.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-oil-can" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>ზეთის მომატებული მოხმარება</strong>
+                    შესაძლოა მიზეზი იყოს ძრავის ცვეთა ან ტურბოს ზეთის გაჟონვა. დროული დიაგნოსტიკა ძრავს სერიოზული დაზიანებისგან იცავს.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="4">
-                <div class="symptom-icon"><i class="fas fa-key"></i></div>
-                <div class="symptom-text"><strong>ძნელი გაქანება ცივ ამინდში</strong>საწვავის სისტემის ან გლოს სანთლების პრობლემა.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-key" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>ძნელად ქოქავს ცივ ამინდში</strong>
+                    შესაძლოა პრობლემა საწვავის სისტემაში ან გახურების სანთლებში (Glow Plug) იყოს.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="1">
-                <div class="symptom-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                <div class="symptom-text"><strong>ძრავის ვიბრაცია და ჯახი</strong>ინჟექტორების ან კომპრესიის პრობლემა, სასწრაფო შემოწმება სჭირდება.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>ძრავი ვიბრირებს ან უჩვეულოდ ხმაურობს</strong>
+                    ინჟექტორების არათანაბარი მუშაობა ან კომპრესიის ვარდნა — ასეთ შემთხვევაში სასწრაფო შემოწმება აუცილებელია.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="2">
-                <div class="symptom-icon"><i class="fas fa-tachometer-alt"></i></div>
-                <div class="symptom-text"><strong>სიმძლავრის კარგვა</strong>ტურბოს ან საწვავის სათავსოს გაჭედვა ამცირებს ავტომობილის ეფექტიანობას.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>სიმძლავრის კლება</strong>
+                    ტურბოს გაუმართაობა ან საწვავის სისტემის დაბინძურება პირდაპირ აისახება ავტომობილის მუშაობასა და დინამიკაზე.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="3">
-                <div class="symptom-icon"><i class="fas fa-stopwatch"></i></div>
-                <div class="symptom-text"><strong>დაყოვნება აჩქარებისას</strong>ტურბოს "ლეგი" ან საწვავის წნევის დაქვეითება &mdash; დიაგნოსტიკით ვადგენთ.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-stopwatch" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>დაყოვნება აჩქარებისას (ტურბო ლეგი)</strong>
+                    ტურბო დაგვიანებით ერთვება ან საწვავის წნევა დაქვეითებულია — დიაგნოსტიკით ზუსტად ვადგენთ მიზეზს.
+                </div>
             </div>
+
             <div class="symptom-card" data-reveal data-reveal-delay="4">
-                <div class="symptom-icon"><i class="fas fa-filter"></i></div>
-                <div class="symptom-text"><strong>DPF / FAP ნაწილაკების ფილტრი</strong>შევსებული ფილტრი ძრავს ანელებს. ვახდენთ ფილტრის გაწმენდას ან გადაპროგრამებას.</div>
+                <div class="symptom-icon">
+                    <i class="fas fa-filter" aria-hidden="true"></i>
+                </div>
+                <div class="symptom-text">
+                    <strong>DPF / FAP ნაწილაკების ფილტრი ჩახშობილია</strong>
+                    გაჭედილი ფილტრი ძრავის მუშაობას აფერხებს და საწვავის ხარჯს ზრდის. ვახორციელებთ პროფესიონალურ გაწმენდასა და საჭიროების შემთხვევაში გადაპროგრამებას.
+                </div>
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- =============================================
-     SERVICES
-============================================= -->
+<!-- SERVICES -->
 <section class="services-section" id="services">
     <div class="container">
         <div class="services-intro">
@@ -1312,10 +1578,9 @@
         </div>
 
         <div class="services-grid" data-reveal>
-            <!-- Service 1 -->
             <div class="service-card" id="services-diagnostics">
-                <span class="service-number">01</span>
-                <div class="service-icon-wrap"><i class="fas fa-laptop-code"></i></div>
+                <span class="service-number" aria-hidden="true">01</span>
+                <div class="service-icon-wrap" aria-hidden="true"><i class="fas fa-laptop-code"></i></div>
                 <h3>ავტომობილის დიაგნოსტირება</h3>
                 <p>თანამედროვე კომპიუტერული სისტემებით ვახდენთ ყველა ელექტრონული კოდის წამოღებას და ზუსტ ანალიზს. სავარაუდო პრობლემის ნაცვლად — ფაქტობრივი ვლინება.</p>
                 <ul class="service-features">
@@ -1325,10 +1590,9 @@
                     <li>დეტალური ანგარიში კლიენტისთვის</li>
                 </ul>
             </div>
-            <!-- Service 2 -->
             <div class="service-card" id="services-engine">
-                <span class="service-number">02</span>
-                <div class="service-icon-wrap"><i class="fas fa-cogs"></i></div>
+                <span class="service-number" aria-hidden="true">02</span>
+                <div class="service-icon-wrap" aria-hidden="true"><i class="fas fa-cogs"></i></div>
                 <h3>ძრავის სერვისი</h3>
                 <p>ძრავის სრული შემოწმება, პრევენციული მოვლა, რეკონდიცია და კაპიტალური შეკეთება. ვმუშაობთ ყველა ევროპული და იაპონური ბრენდის დიზელ ძრავებზე.</p>
                 <ul class="service-features">
@@ -1338,10 +1602,9 @@
                     <li>ახალი ძრავის მოწყობა</li>
                 </ul>
             </div>
-            <!-- Service 3 -->
             <div class="service-card" id="services-turbo">
-                <span class="service-number">03</span>
-                <div class="service-icon-wrap"><i class="fas fa-wind"></i></div>
+                <span class="service-number" aria-hidden="true">03</span>
+                <div class="service-icon-wrap" aria-hidden="true"><i class="fas fa-wind"></i></div>
                 <h3>ტურბოჩარჯერის სერვისი</h3>
                 <p>ტურბოს კვამლი, ხმაური ან სიმძლავრის კარგვა? ვახდენთ ტურბოს სრულ შემოწმებას, ბალანსირებას, ხელახლა აწყობას ან ახლით ჩანაცვლებას.</p>
                 <ul class="service-features">
@@ -1351,10 +1614,9 @@
                     <li>Wastegate-ის კალიბრაცია</li>
                 </ul>
             </div>
-            <!-- Service 4 -->
             <div class="service-card" id="services-fuel">
-                <span class="service-number">04</span>
-                <div class="service-icon-wrap"><i class="fas fa-gas-pump"></i></div>
+                <span class="service-number" aria-hidden="true">04</span>
+                <div class="service-icon-wrap" aria-hidden="true"><i class="fas fa-gas-pump"></i></div>
                 <h3>საწვავის სისტემის სერვისი</h3>
                 <p>Common Rail, ინჟექტორები, HP ტუმბო — ვახდენთ სრულ დიაგნოსტიკასა და მომსახურებას. ულტრაბგერითი გამწმენდი სისტემით ვასუფთავებთ ინჟექტორებს.</p>
                 <ul class="service-features">
@@ -1368,9 +1630,7 @@
     </div>
 </section>
 
-<!-- =============================================
-     UNDER THE LOUPE (KEPT)
-============================================= -->
+<!-- LOUPE / DIAGNOSTICS -->
 <section class="loupe-section" id="diagnostics">
     <div class="container">
         <div style="text-align:center; margin-bottom:4rem;" data-reveal>
@@ -1382,34 +1642,25 @@
         </div>
         <div class="loupe-layout">
             <div class="loupe-image-wrapper" data-reveal>
-                <!--
-                    REPLACE THIS IMAGE:
-                    Recommended: close-up of diesel engine / turbo / injector rail
-                    Dimensions: tall portrait or square, min 800px wide
-                -->
                 <img class="main-loupe-image"
-                    src="https://i.pinimg.com/736x/a2/8c/09/a28c09914c6a3e3fdb611e716521a385.jpg"
+                    src="./მიკროსკოპი_cropped_version_skhila_diesel-removebg-preview (1).png"
                     alt="Diesel engine diagnostic view"
                     id="main-loupe-image">
-                <div class="digital-loupe" id="digital-loupe"></div>
+                <div class="digital-loupe" id="digital-loupe" aria-hidden="true"></div>
             </div>
-
             <div class="loupe-details" data-reveal>
                 <div class="loupe-header">
                     <span class="section-label">ინტერაქტიური ხედი</span>
                     <h3 class="section-title" style="font-size:1.6rem;">აირჩიეთ<br><em>კომპონენტი</em></h3>
                 </div>
-
                 <button class="hotspot-trigger is-active" data-hotspot-id="1" data-x="38%" data-y="28%">
                     <h3>საწვავის მაღალი წნევის სისტემა</h3>
                     <p>Common Rail სისტემა ქმნის 1800+ ბარ წნევას. უმნიშვნელო გაჟონვაც კი ამცირებს ეფექტიანობას — ვამოწმებთ ელექტრული სტენდით.</p>
                 </button>
-
                 <button class="hotspot-trigger" data-hotspot-id="2" data-x="62%" data-y="44%">
                     <h3>ტურბოს ჩარჩო და ლუქები</h3>
                     <p>ზეთის ნიშნები ტურბოს კორპუსზე, ხმაური ან მოხეთქვა — ნიშნავს ბეარინგის ან ლუქის ცვეთას. ვახდენთ ჩარჩოს ბალანსირებას 150,000 RPM-ზე.</p>
                 </button>
-
                 <button class="hotspot-trigger" data-hotspot-id="3" data-x="50%" data-y="70%">
                     <h3>EGR / DPF სისტემა</h3>
                     <p>გაჭედილი EGR ვალვი ან სავსე DPF ფილტრი ამცირებს სიმძლავრეს და ზრდის ძრავის ტემპერატურას. ვახდენთ გაწმენდას ან ხელახალ დაპროგრამებას.</p>
@@ -1419,30 +1670,22 @@
     </div>
 </section>
 
-<!-- =============================================
-     ABOUT
-============================================= -->
+<!-- ABOUT -->
 <section class="about-section" id="about">
     <div class="container">
         <div class="about-layout">
             <div class="about-image-mosaic" data-reveal>
-                <!--
-                    REPLACE THESE IMAGES:
-                    Primary: workshop interior, mechanic at work
-                    Secondary: diagnostic equipment, close-up of engine
-                -->
                 <img class="about-img-primary"
                     src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=700&q=80"
-                    alt="სხილა დიზელ სახელოსნო">
+                    alt="სხილა დიზელ სახელოსნო" loading="lazy">
                 <img class="about-img-secondary"
                     src="https://images.unsplash.com/photo-1562564055-71e051d33c19?w=500&q=80"
-                    alt="კომპიუტერული დიაგნოსტიკა">
-                <div class="about-badge">
+                    alt="კომპიუტერული დიაგნოსტიკა" loading="lazy">
+                <div class="about-badge" aria-label="15 წელზე მეტი გამოცდილება">
                     <span class="about-badge-num">15+</span>
                     <span class="about-badge-text">წლის<br>გამოც.</span>
                 </div>
             </div>
-
             <div class="about-text" data-reveal>
                 <div>
                     <span class="section-label">ჩვენ შესახებ</span>
@@ -1453,28 +1696,28 @@
                 </p>
                 <div class="about-pillars">
                     <div class="pillar">
-                        <i class="fas fa-shield-alt pillar-icon"></i>
+                        <i class="fas fa-shield-alt pillar-icon" aria-hidden="true"></i>
                         <div>
                             <h4>ევროპული სტანდარტი</h4>
                             <p>Bosch, Delphi, Denso სასერვისო ინსტრუმენტები.</p>
                         </div>
                     </div>
                     <div class="pillar">
-                        <i class="fas fa-user-tie pillar-icon"></i>
+                        <i class="fas fa-user-tie pillar-icon" aria-hidden="true"></i>
                         <div>
                             <h4>გამოცდილი გუნდი</h4>
                             <p>სერტიფიცირებული მექანიკოსები, სპეციალიზებული ბრენდებით.</p>
                         </div>
                     </div>
                     <div class="pillar">
-                        <i class="fas fa-bolt pillar-icon"></i>
+                        <i class="fas fa-bolt pillar-icon" aria-hidden="true"></i>
                         <div>
                             <h4>სწრაფი სერვისი</h4>
                             <p>დიაგნოსტიკა 30 წუთში. ძირითადი სამუშაო — 1 დღეში.</p>
                         </div>
                     </div>
                     <div class="pillar">
-                        <i class="fas fa-medal pillar-icon"></i>
+                        <i class="fas fa-medal pillar-icon" aria-hidden="true"></i>
                         <div>
                             <h4>გარანტია</h4>
                             <p>ყველა სამუშაოს ხარისხზე ვაძლევთ გარანტიას წერილობით.</p>
@@ -1486,9 +1729,7 @@
     </div>
 </section>
 
-<!-- =============================================
-     BRANDS
-============================================= -->
+<!-- BRANDS -->
 <section class="brands-section" data-reveal>
     <div class="container">
         <p class="brands-label">ვმუშაობთ ბრენდებზე</p>
@@ -1509,9 +1750,7 @@
     </div>
 </section>
 
-<!-- =============================================
-     CTA BANNER
-============================================= -->
+<!-- CTA BANNER -->
 <div class="cta-banner">
     <div class="container cta-inner">
         <div class="cta-text-group">
@@ -1520,14 +1759,12 @@
         </div>
         <div class="cta-phone-big">593 00 42 00</div>
         <a href="#contact" class="btn-cta-white">
-            <i class="fas fa-calendar-check"></i> სერვისის ჩაწერა
+            <i class="fas fa-calendar-check" aria-hidden="true"></i> სერვისის ჩაწერა
         </a>
     </div>
 </div>
 
-<!-- =============================================
-     CONTACT
-============================================= -->
+<!-- CONTACT -->
 <section class="contact-section" id="contact">
     <div class="container">
         <div style="margin-bottom:4rem;" data-reveal>
@@ -1537,21 +1774,21 @@
         <div class="contact-layout">
             <div class="contact-info" data-reveal>
                 <div class="contact-detail">
-                    <div class="contact-detail-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div class="contact-detail-icon"><i class="fas fa-phone-alt" aria-hidden="true"></i></div>
                     <div>
                         <div class="contact-detail-label">ტელეფონი</div>
                         <div class="contact-detail-value"><a href="tel:+995593004200">593 00 42 00</a></div>
                     </div>
                 </div>
                 <div class="contact-detail">
-                    <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-detail-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
                     <div>
                         <div class="contact-detail-label">მისამართი</div>
                         <div class="contact-detail-value">ვასო გოძიაშვილის I შ. N2, თბილისი</div>
                     </div>
                 </div>
                 <div class="contact-detail">
-                    <div class="contact-detail-icon"><i class="fas fa-clock"></i></div>
+                    <div class="contact-detail-icon"><i class="fas fa-clock" aria-hidden="true"></i></div>
                     <div>
                         <div class="contact-detail-label">სამუშაო საათები</div>
                         <div class="contact-detail-value" style="font-size:0.95rem; font-weight:600;">
@@ -1560,14 +1797,13 @@
                     </div>
                 </div>
                 <div class="contact-detail">
-                    <div class="contact-detail-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="contact-detail-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
                     <div>
                         <div class="contact-detail-label">WhatsApp / Viber</div>
                         <div class="contact-detail-value"><a href="https://wa.me/995593004200">593 00 42 00</a></div>
                     </div>
                 </div>
             </div>
-
             <div data-reveal>
                 <form class="contact-form" id="contact-form" action="https://formspree.io/f/myzjpoln" method="POST">
                     <div class="form-row">
@@ -1602,18 +1838,16 @@
                     <p class="form-note">თქვენი მონაცემები გამოიყენება მხოლოდ სერვისის ჩაწერისთვის.</p>
                     <button type="submit" class="btn btn-red" style="width:100%;justify-content:center;padding:1rem;">
                         <span class="btn-text">გაგზავნა</span>
-                        <i class="fas fa-arrow-right btn-icon"></i>
+                        <i class="fas fa-arrow-right btn-icon" aria-hidden="true"></i>
                     </button>
-                    <div class="form-status" id="form-status"></div>
+                    <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
                 </form>
             </div>
         </div>
     </div>
 </section>
 
-<!-- =============================================
-     FOOTER
-============================================= -->
+<!-- FOOTER -->
 <footer class="site-footer">
     <div class="container">
         <div class="footer-grid">
@@ -1647,9 +1881,9 @@
         <div class="footer-bottom">
             <p class="footer-copy">&copy; <span id="year"></span> სხილა დიზელ მოტორსი. ყველა უფლება დაცულია.</p>
             <div class="footer-socials">
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/995593004200" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                <a href="https://wa.me/995593004200" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
             </div>
         </div>
     </div>
@@ -1660,32 +1894,49 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- YEAR ---
+    // ── Utilities ─────────────────────────────────────────────────────────────
+
+    /** Returns the computed --header-h value in pixels, used for scroll offset. */
+    const getHeaderHeight = () => {
+        const raw = getComputedStyle(document.documentElement)
+            .getPropertyValue('--header-h').trim();
+        return parseFloat(raw) || 72;
+    };
+
+    // ── Year ──────────────────────────────────────────────────────────────────
+
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // --- HEADER SCROLL ---
+    // ── Header scroll state ───────────────────────────────────────────────────
+
     const header = document.getElementById('site-header');
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 60);
     }, { passive: true });
 
-    // --- BURGER / MOBILE MENU ---
-    const burger = document.getElementById('burger');
-    const mobileMenu = document.getElementById('mobile-menu');
+    // ── Burger / mobile menu ──────────────────────────────────────────────────
+
+    const burger      = document.getElementById('burger');
+    const mobileMenu  = document.getElementById('mobile-menu');
+
     burger.addEventListener('click', () => {
-        burger.classList.toggle('is-active');
-        mobileMenu.classList.toggle('is-open');
+        const isOpen = burger.classList.toggle('is-active');
+        mobileMenu.classList.toggle('is-open', isOpen);
+        burger.setAttribute('aria-expanded', String(isOpen));
     });
+
     mobileMenu.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => {
             burger.classList.remove('is-active');
             mobileMenu.classList.remove('is-open');
+            burger.setAttribute('aria-expanded', 'false');
         });
     });
 
-    // --- REVEAL ON SCROLL ---
-    const reveals = document.querySelectorAll('[data-reveal]');
+    // ── Reveal on scroll ──────────────────────────────────────────────────────
+
+    const reveals   = document.querySelectorAll('[data-reveal]');
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
             if (e.isIntersecting) {
@@ -1696,86 +1947,303 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
     reveals.forEach(el => revealObs.observe(el));
 
-    // --- 3D CAROUSEL (HERO) ---
+    // ── Service card highlight ─────────────────────────────────────────────────
+    //
+    //  Called whenever the user navigates from the carousel to a service card.
+    //  Steps:
+    //    1. Remove the class first (forces CSS animation to restart if re-triggered).
+    //    2. Re-add it on the next animation frame so the browser registers the reset.
+    //    3. Auto-remove after the animation completes (2.6 s) to leave the card clean.
+    //
+    const HIGHLIGHT_DURATION_MS = 2600;
+    let highlightTimer = null;
+
+    /**
+     * Highlights a service card with the entrance animation.
+     * @param {HTMLElement} card - The .service-card element to highlight.
+     */
+    const highlightServiceCard = (card) => {
+        if (!card) return;
+
+        // Cancel any in-flight highlight on the same or another card.
+        if (highlightTimer) {
+            clearTimeout(highlightTimer);
+            document.querySelectorAll('.service-card.is-highlighted')
+                .forEach(el => el.classList.remove('is-highlighted'));
+        }
+
+        // Force a style flush so removing+adding the class restarts the animation.
+        card.classList.remove('is-highlighted');
+        // eslint-disable-next-line no-unused-expressions -- intentional reflow
+        card.offsetHeight;
+
+        card.classList.add('is-highlighted');
+
+        highlightTimer = setTimeout(() => {
+            card.classList.remove('is-highlighted');
+            highlightTimer = null;
+        }, HIGHLIGHT_DURATION_MS);
+    };
+
+    // ── Carousel → Service navigation ─────────────────────────────────────────
+    //
+    //  Each .slide carries:
+    //    data-target  — CSS selector for the destination .service-card
+    //
+    //  Navigation strategy:
+    //    1. Resolve the target element using data-target.
+    //    2. Calculate the scroll position accounting for the sticky header height
+    //       and a small visual breathing room (SCROLL_OFFSET_EXTRA).
+    //    3. Smoothly scroll to that position (native scrollTo, no library dep).
+    //    4. After the scroll settles, trigger the highlight animation.
+    //       "Settled" = estimated scroll duration (capped at 800 ms) + a brief
+    //       buffer so the card is fully in view before it lights up.
+    //
+    const SCROLL_OFFSET_EXTRA = 24; // px below the header to give breathing room
+    const HIGHLIGHT_DELAY_MS  = 420; // delay after scroll before animation fires
+
+    /**
+     * Navigate to the service card linked by `targetSelector` and highlight it.
+     * @param {string} targetSelector - CSS selector, e.g. "#services-diagnostics"
+     */
+    const navigateToService = (targetSelector) => {
+        if (!targetSelector) return;
+
+        const targetEl = document.querySelector(targetSelector);
+        if (!targetEl) return;
+
+        const headerH  = getHeaderHeight();
+        const offset   = headerH + SCROLL_OFFSET_EXTRA;
+        const targetY  = targetEl.getBoundingClientRect().top + window.scrollY - offset;
+        const distance = Math.abs(window.scrollY - targetY);
+
+        // Estimate scroll duration (browser varies; 1px/ms is a safe upper bound,
+        // capped to avoid waiting too long on short distances).
+        const estimatedScrollMs = Math.min(Math.max(distance * 0.6, 300), 800);
+
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+        // Trigger highlight after scroll settles.
+        setTimeout(() => {
+            highlightServiceCard(targetEl);
+        }, estimatedScrollMs + HIGHLIGHT_DELAY_MS);
+    };
+
+    // ── 3D Carousel ──────────────────────────────────────────────────────────
+    //
+    //  KEY IMPROVEMENTS OVER PREVIOUS VERSION:
+    //
+    //  1. Front-slide tracking — every frame we find the slide closest to 0°
+    //     (the front face) and mark it with data-is-front="true". When it
+    //     changes, the popup button animates in / updates with the new label.
+    //
+    //  2. Lag fix — clicks on rear-facing slides are blocked by checking the
+    //     slide's current zIndex (or normalised angle). Only the front slide
+    //     is "clickable"; all others are inert to pointer events via CSS
+    //     `pointer-events: none` (set per-frame through GSAP). This prevents
+    //     the 3D-transformed ghost layers from stealing the click.
+    //
+    //  3. Popup button — a single shared button sits below the carousel.
+    //     It shows the front slide's label and navigates on click. GSAP
+    //     drives all transitions so they're perfectly frame-rate synced.
+    //
     (() => {
-        const wrapper = document.querySelector('.carousel-wrapper');
-        const container = document.getElementById('showcase-container');
-        const slides = gsap.utils.toArray('.slide');
+        const wrapper     = document.querySelector('.carousel-wrapper');
+        const container   = document.getElementById('showcase-container');
+        const slides      = gsap.utils.toArray('.slide');
+        const popupWrap   = document.getElementById('slide-popup');
+        const popupBtn    = document.getElementById('slide-popup-btn');
+        const popupText   = document.getElementById('slide-popup-text');
         if (!wrapper || !container || slides.length === 0) return;
 
+        // Each slide carries a data-label attribute with the Georgian service name.
+        // Fall back to the img alt text if data-label is missing.
+        const getSlideLabel = (slide) =>
+            slide.dataset.label ||
+            (slide.querySelector('img')?.alt) ||
+            '';
+
+        /** Read --carousel-radius from the container's computed styles. */
         const getRadius = () => {
-            const cssVal = getComputedStyle(container).getPropertyValue('--carousel-radius').trim();
+            const cssVal = getComputedStyle(container)
+                .getPropertyValue('--carousel-radius').trim();
             const parsed = parseFloat(cssVal);
             return Number.isFinite(parsed) ? parsed : 320;
         };
 
-        slides.forEach((s, i) => {
-            const angle = i * (360 / slides.length);
-            s.dataset.rotation = angle;
+        // Assign each slide its base rotation angle around the Y axis.
+        slides.forEach((slide, i) => {
+            slide.dataset.rotation = i * (360 / slides.length);
         });
 
+        /** Re-apply 3D geometry — called on init and on resize. */
         const applyGeometry = () => {
             const radius = getRadius();
-            slides.forEach(s => {
-                gsap.set(s, {
-                    rotationY: parseFloat(s.dataset.rotation),
+            slides.forEach(slide => {
+                gsap.set(slide, {
+                    rotationY:       parseFloat(slide.dataset.rotation),
                     transformOrigin: `50% 50% ${-radius}px`,
-                    x: -s.offsetWidth / 2,
-                    y: -s.offsetHeight / 2
+                    x:               -slide.offsetWidth  / 2,
+                    y:               -slide.offsetHeight / 2,
                 });
             });
         };
         applyGeometry();
 
-        const proxy = { value: 0 };
-        const auto = gsap.to(proxy, {
-            value: 360, duration: 18, ease: 'none', repeat: -1,
-            onUpdate: () => {
-                slides.forEach(s => {
-                    const a = parseFloat(s.dataset.rotation) + proxy.value;
-                    const rel = Math.abs(a % 360);
-                    const n = Math.min(rel, 360 - rel) / 180;
-                    gsap.set(s, {
-                        rotationY: a,
-                        filter: `brightness(${1 - n * 0.55})`,
-                        opacity: 1 - n * 0.45,
-                        scale: 1 - n * 0.28,
-                        zIndex: Math.round(100 * (1 - n))
-                    });
-                });
-            }
-        });
-        wrapper.addEventListener('mouseenter', () => gsap.to(auto, { timeScale: 0, duration: 0.5 }));
-        wrapper.addEventListener('mouseleave', () => gsap.to(auto, { timeScale: 1, duration: 0.5 }));
+        // ── Popup state machine ──────────────────────────────────────────────
+        //
+        //  currentFrontSlide tracks which slide owns the popup so we only
+        //  animate when the front slide actually changes (prevents jitter).
+        //
+        let currentFrontSlide  = null;
+        let popupVisible       = false;
+        let popupAnimating     = false;
 
-        // Recompute geometry on resize/orientation change so breakpoint
-        // changes (e.g. rotating a phone) don't leave slides mis-scaled.
+        const FRONT_THRESHOLD = 40; // degrees — within this of 0° = "front"
+
+        const showPopup = (slide) => {
+            const label = getSlideLabel(slide);
+            popupText.textContent = label + ' →';
+            popupBtn.setAttribute('aria-label', label + '-ის სერვისზე გადასვლა');
+            popupBtn.dataset.target = slide.dataset.target;
+
+            if (popupVisible && !popupAnimating) return; // already shown
+
+            popupAnimating = true;
+            gsap.killTweensOf(popupBtn);
+            gsap.to(popupBtn, {
+                opacity:  1,
+                y:        0,
+                scale:    1,
+                duration: 0.52,
+                ease:     'back.out(1.6)',
+                onComplete: () => { popupAnimating = false; },
+            });
+            popupVisible = true;
+        };
+
+        const hidePopup = () => {
+            if (!popupVisible) return;
+            popupAnimating = true;
+            gsap.killTweensOf(popupBtn);
+            gsap.to(popupBtn, {
+                opacity:  0,
+                y:        12,
+                scale:    0.93,
+                duration: 0.32,
+                ease:     'power2.in',
+                onComplete: () => {
+                    popupAnimating = false;
+                    popupVisible   = false;
+                },
+            });
+        };
+
+        // ── Popup click → navigate ───────────────────────────────────────────
+        popupBtn.addEventListener('click', () => {
+            const targetSelector = popupBtn.dataset.target;
+            if (targetSelector) navigateToService(targetSelector);
+        });
+
+        // ── Main rotation tween ──────────────────────────────────────────────
+        const proxy = { value: 0 };
+        const autoTween = gsap.to(proxy, {
+            value:    360,
+            duration: 18,
+            ease:     'none',
+            repeat:   -1,
+            onUpdate: () => {
+                let frontSlide     = null;
+                let frontAngleDist = Infinity;
+
+                slides.forEach(slide => {
+                    const absAngle  = parseFloat(slide.dataset.rotation) + proxy.value;
+                    const relAngle  = Math.abs(absAngle % 360);
+                    // Normalised distance from front-face (0 = front, 1 = back).
+                    const n         = Math.min(relAngle, 360 - relAngle) / 180;
+                    const angleDist = Math.min(relAngle, 360 - relAngle); // degrees
+
+                    gsap.set(slide, {
+                        rotationY:     absAngle,
+                        filter:        `brightness(${1 - n * 0.55})`,
+                        opacity:       1 - n * 0.45,
+                        scale:         1 - n * 0.28,
+                        zIndex:        Math.round(100 * (1 - n)),
+                        // ── LAG FIX: only the front slide is pointer-interactive.
+                        // Rear slides with 3D transforms were intercepting clicks.
+                        pointerEvents: angleDist < FRONT_THRESHOLD ? 'auto' : 'none',
+                    });
+
+                    if (angleDist < frontAngleDist) {
+                        frontAngleDist = angleDist;
+                        frontSlide     = slide;
+                    }
+                });
+
+                // Update popup only when the front slide changes.
+                if (frontSlide !== currentFrontSlide) {
+                    currentFrontSlide = frontSlide;
+                    if (frontSlide && frontAngleDist < FRONT_THRESHOLD) {
+                        showPopup(frontSlide);
+                    } else {
+                        hidePopup();
+                    }
+                }
+            },
+        });
+
+        // ── Hover: pause auto-rotation ───────────────────────────────────────
+        wrapper.addEventListener('mouseenter', () =>
+            gsap.to(autoTween, { timeScale: 0, duration: 0.5 }));
+        wrapper.addEventListener('mouseleave', () =>
+            gsap.to(autoTween, { timeScale: 1, duration: 0.5 }));
+
+        // ── Resize: recompute geometry ───────────────────────────────────────
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(applyGeometry, 150);
         }, { passive: true });
 
-        // --- Click-to-navigate: smooth scroll to matching service section ---
+        // ── Slide click / keyboard ───────────────────────────────────────────
+        //
+        //  Clicking the slide itself ALSO navigates (not just the popup button).
+        //  We guard against accidental clicks on rear slides using pointer-events,
+        //  but add a second guard here using the angle distance for belt-and-braces.
+        //
         slides.forEach(slide => {
-            slide.addEventListener('click', () => {
+            const handleActivation = () => {
+                // Only fire if this slide is actually at the front.
+                const absAngle  = parseFloat(slide.dataset.rotation) + proxy.value;
+                const relAngle  = Math.abs(absAngle % 360);
+                const angleDist = Math.min(relAngle, 360 - relAngle);
+                if (angleDist > FRONT_THRESHOLD) return; // not front — ignore
+
                 const targetSelector = slide.dataset.target;
-                if (!targetSelector) return;
-                const targetEl = document.querySelector(targetSelector);
-                if (targetEl) {
-                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                navigateToService(targetSelector);
+            };
+
+            slide.addEventListener('click', handleActivation);
+
+            slide.addEventListener('keydown', (e) => {
+                // Activate on Enter or Space, matching native <button> behaviour.
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); // prevent page scroll on Space
+                    handleActivation();
                 }
             });
         });
     })();
 
-    // --- UNDER THE LOUPE ---
+    // ── Under the Loupe ──────────────────────────────────────────────────────
+
     (() => {
         const explorer = document.querySelector('.loupe-layout');
         if (!explorer) return;
+
         const triggers = explorer.querySelectorAll('.hotspot-trigger');
-        const mainImg = document.getElementById('main-loupe-image');
-        const loupe = document.getElementById('digital-loupe');
+        const mainImg  = document.getElementById('main-loupe-image');
+        const loupe    = document.getElementById('digital-loupe');
         const isMobile = window.innerWidth <= 768;
 
         if (mainImg && loupe) loupe.style.backgroundImage = `url(${mainImg.src})`;
@@ -1787,12 +2255,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 trigger.classList.add('is-active');
                 mainImg.classList.add('is-dimmed');
                 gsap.to(loupe, {
-                    left: trigger.dataset.x,
-                    top: trigger.dataset.y,
-                    xPercent: -50, yPercent: -50,
-                    opacity: 1, scale: 1,
-                    duration: 1.1, ease: 'power3.out',
-                    backgroundPosition: `${trigger.dataset.x} ${trigger.dataset.y}`
+                    left:               trigger.dataset.x,
+                    top:                trigger.dataset.y,
+                    xPercent:           -50,
+                    yPercent:           -50,
+                    opacity:            1,
+                    scale:              1,
+                    duration:           1.1,
+                    ease:               'power3.out',
+                    backgroundPosition: `${trigger.dataset.x} ${trigger.dataset.y}`,
                 });
             });
         });
@@ -1805,20 +2276,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         const first = triggers[0];
                         if (!first) return;
                         const tl = gsap.timeline();
-                        tl.to(first, { borderLeftColor: 'var(--red)', backgroundColor: 'rgba(200,24,26,0.08)', duration: 0.5 });
+                        tl.to(first, {
+                            borderLeftColor:  'var(--red)',
+                            backgroundColor:  'rgba(200,24,26,0.08)',
+                            duration:         0.5,
+                        });
                         tl.add(() => mainImg.classList.add('is-dimmed'), '<');
                         tl.to(loupe, {
-                            opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out',
-                            left: first.dataset.x, top: first.dataset.y,
-                            xPercent: -50, yPercent: -50,
-                            backgroundPosition: `${first.dataset.x} ${first.dataset.y}`
+                            opacity:            1,
+                            scale:              1,
+                            duration:           1.1,
+                            ease:               'power3.out',
+                            left:               first.dataset.x,
+                            top:                first.dataset.y,
+                            xPercent:           -50,
+                            yPercent:           -50,
+                            backgroundPosition: `${first.dataset.x} ${first.dataset.y}`,
                         }, '<');
                         tl.to({}, { duration: 2 });
                         tl.add(() => mainImg.classList.remove('is-dimmed'));
                         tl.to(loupe, { opacity: 0, scale: 0.5, duration: 0.7, ease: 'power3.inOut' }, '<');
                         tl.set(first, { clearProps: 'all' });
                     } else {
-                        gsap.fromTo(triggers,
+                        gsap.fromTo(
+                            triggers,
                             { opacity: 0, x: -20 },
                             { opacity: 1, x: 0, duration: 0.7, stagger: 0.18, ease: 'power2.out' }
                         );
@@ -1829,44 +2310,52 @@ document.addEventListener('DOMContentLoaded', () => {
         loupeObs.observe(explorer);
     })();
 
-    // --- CONTACT FORM ---
+    // ── Contact form ──────────────────────────────────────────────────────────
+
     (() => {
-        const form = document.getElementById('contact-form');
+        const form    = document.getElementById('contact-form');
         if (!form) return;
-        const btn = form.querySelector('button[type="submit"]');
+
+        const btn     = form.querySelector('button[type="submit"]');
         const btnText = form.querySelector('.btn-text');
         const btnIcon = form.querySelector('.btn-icon');
-        const status = document.getElementById('form-status');
+        const status  = document.getElementById('form-status');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            btn.disabled = true;
-            btnText.textContent = 'იგზავნება...';
-            btnIcon.className = 'fas fa-spinner fa-spin btn-icon';
-            status.className = 'form-status';
+            btn.disabled         = true;
+            btnText.textContent  = 'იგზავნება...';
+            btnIcon.className    = 'fas fa-spinner fa-spin btn-icon';
+            status.className     = 'form-status';
 
-            const data = new FormData(form);
             try {
-                const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+                const res = await fetch(form.action, {
+                    method:  'POST',
+                    body:    new FormData(form),
+                    headers: { 'Accept': 'application/json' },
+                });
+
                 if (res.ok) {
-                    btnText.textContent = 'გაგზავნილია';
-                    btnIcon.className = 'fas fa-check btn-icon';
-                    status.textContent = 'გმადლობთ! მალე დაგიკავშირდებით.';
-                    status.className = 'form-status success';
+                    btnText.textContent  = 'გაგზავნილია';
+                    btnIcon.className    = 'fas fa-check btn-icon';
+                    status.textContent   = 'გმადლობთ! მალე დაგიკავშირდებით.';
+                    status.className     = 'form-status success';
                     form.reset();
                     setTimeout(() => {
-                        btn.disabled = false;
+                        btn.disabled        = false;
                         btnText.textContent = 'გაგზავნა';
-                        btnIcon.className = 'fas fa-arrow-right btn-icon';
-                        status.className = 'form-status';
+                        btnIcon.className   = 'fas fa-arrow-right btn-icon';
+                        status.className    = 'form-status';
                     }, 4000);
-                } else { throw new Error(); }
+                } else {
+                    throw new Error('Server responded with an error');
+                }
             } catch {
-                btn.disabled = false;
+                btn.disabled        = false;
                 btnText.textContent = 'გაგზავნა';
-                btnIcon.className = 'fas fa-arrow-right btn-icon';
-                status.textContent = 'შეცდომა. სცადეთ ხელახლა ან დარეკეთ.';
-                status.className = 'form-status error';
+                btnIcon.className   = 'fas fa-arrow-right btn-icon';
+                status.textContent  = 'შეცდომა. სცადეთ ხელახლა ან დარეკეთ.';
+                status.className    = 'form-status error';
             }
         });
     })();
