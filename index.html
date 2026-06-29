@@ -109,6 +109,7 @@
         [data-reveal-delay="3"] { transition-delay: 0.3s; }
         [data-reveal-delay="4"] { transition-delay: 0.4s; }
 
+        /* ===================== HEADER ===================== */
         .site-header {
             position: fixed;
             top: 0; left: 0;
@@ -176,6 +177,7 @@
         .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
         .mobile-menu .nav-link { font-size: 1.2rem; color: var(--white); }
 
+        /* ===================== HERO ===================== */
         .hero-section {
             min-height: 100vh;
             display: flex;
@@ -196,7 +198,16 @@
         }
         .hero-accent-line { position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, transparent, var(--red) 30%, var(--red) 70%, transparent); }
         .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(200,24,26,0.08) 0%, transparent 70%); top: 50%; left: 60%; transform: translate(-50%, -50%); pointer-events: none; }
-        .hero-content { position: relative; z-index: 10; padding: 2.5rem 0 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 2.5rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
         .hero-eyebrow {
             font-family: var(--font-head);
             font-size: 0.75rem;
@@ -213,22 +224,57 @@
             animation: fadeUp 0.8s 0.3s var(--ease-out) forwards;
         }
         .hero-eyebrow::before { content: ''; width: 32px; height: 2px; background: var(--red); }
-        .hero-title { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; letter-spacing: 0.02em; color: var(--white); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.9s 0.5s var(--ease-out) forwards; }
-        .hero-title .line-red { color: var(--red); display: block; }
-        .hero-subtitle { font-size: 1.05rem; color: var(--gray-300); max-width: 48ch; margin: 0 auto 1.2rem; line-height: 1.8; opacity: 0; animation: fadeUp 0.9s 0.7s var(--ease-out) forwards; }
-        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.9s 0.9s var(--ease-out) forwards; }
-        .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 1rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.07); opacity: 0; animation: fadeUp 0.9s 1.1s var(--ease-out) forwards; flex-wrap: wrap; }
+        .hero-title { 
+            font-family: var(--font-display); 
+            font-size: clamp(2.75rem, 6vw, 5rem); 
+            line-height: 0.95; 
+            letter-spacing: 0.02em; 
+            color: var(--white); 
+            margin-bottom: 1.5rem; 
+            opacity: 0; 
+            animation: fadeUp 0.9s 0.5s var(--ease-out) forwards; 
+            z-index: 10;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.9);
+        }
+        .hero-title .line-red { color: var(--red); }
+        .hero-subtitle { 
+            font-size: 1.05rem; 
+            color: var(--gray-300); 
+            max-width: 48ch; 
+            margin: 0 auto 1.2rem; 
+            line-height: 1.8; 
+            opacity: 0; 
+            animation: fadeUp 0.9s 0.7s var(--ease-out) forwards;
+            position: relative;
+            z-index: 10;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,1);
+        }
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.9s 0.9s var(--ease-out) forwards; z-index: 10;}
+        .hero-stats { 
+            display: flex; 
+            justify-content: center; 
+            gap: 3rem; 
+            margin-top: 1rem; 
+            padding-top: 1.4rem; 
+            border-top: 1px solid rgba(255,255,255,0.07); 
+            opacity: 0; 
+            animation: fadeUp 0.9s 1.1s var(--ease-out) forwards; 
+            flex-wrap: wrap; 
+        }
         .hero-stat { text-align: center; }
         .hero-stat-num { font-family: var(--font-display); font-size: 2.8rem; line-height: 1; color: var(--white); }
         .hero-stat-num span { color: var(--red); }
         .hero-stat-label { font-size: 0.8rem; color: var(--gray-300); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
 
+        /* ===================== CAROUSEL ===================== */
         #showcase-container {
             width: 100%;
             max-width: 980px;
             height: 480px;
             position: relative;
-            margin: 1rem auto 0;
+            margin: -120px auto -100px; 
+            z-index: 1;
             --slide-size: 560px;
             --carousel-radius: 460px;
         }
@@ -272,10 +318,10 @@
         .slide-popup-btn:hover .popup-arrow { transform: translateX(5px); }
         .slide-popup-btn .popup-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.85); flex-shrink: 0; animation: popupDotPulse 1.6s ease-in-out infinite; }
         @keyframes popupDotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.6); } }
-        @media (prefers-reduced-motion: reduce) { .slide-popup-btn .popup-dot { animation: none; } .slide-popup-btn::before { display: none; } }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ===================== SERVICE HIGHLIGHT ANIMATIONS ===================== */
         @keyframes serviceHighlightGlow {
             0%   { box-shadow: none; }
             8%   { box-shadow: 0 0 0 2px var(--red), 0 0 32px rgba(200,24,26,0.5), inset 0 0 24px rgba(200,24,26,0.08); }
@@ -288,6 +334,7 @@
         .service-card.is-highlighted { animation: serviceHighlightGlow 2.6s var(--ease-out) forwards, serviceHighlightScale 2.6s var(--ease-out) forwards, serviceHighlightBg 2.6s var(--ease-out) forwards; will-change: transform, box-shadow, background-color; position: relative; z-index: 10; }
         .service-card.is-highlighted::before { animation: serviceHighlightUnderline 2.6s var(--ease-out) forwards !important; transform-origin: left !important; }
 
+        /* ===================== MARQUEE ===================== */
         .marquee-strip { background: var(--red); overflow: hidden; padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(0,0,0,0.2); }
         .marquee-track { display: flex; gap: 3rem; width: max-content; animation: marqueeScroll 28s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
@@ -295,16 +342,60 @@
         .marquee-item::after { content: '//'; color: rgba(255,255,255,0.4); }
         @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
+        /* ===================== SYMPTOMS ===================== */
         .symptoms-section { padding: 7rem 0; background: var(--navy-mid); position: relative; }
         .symptoms-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,24,26,0.4), transparent); }
         .symptoms-header { text-align: center; margin-bottom: 4rem; }
-        .symptoms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-        .symptom-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 4px; padding: 1.8rem 1.5rem; display: flex; align-items: flex-start; gap: 1.1rem; transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--ease-out); }
+        .symptoms-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 1.5rem; 
+        }
+        .symptom-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 4px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            grid-template-rows: auto auto; 
+            column-gap: 1.2rem;
+            row-gap: 1.2rem;
+            height: 100%;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+        }
+        .symptom-icon {
+            grid-column: 1;
+            grid-row: 1;
+            width: 50px;
+            height: 50px;
+            background: var(--red);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 1.1rem;
+        }
+        .symptom-card strong {
+            grid-column: 2;
+            grid-row: 1;
+            align-self: center;
+            font-size: 1.1rem;
+            color: var(--white);
+            line-height: 1.3;
+        }
+        .symptom-desc {
+            grid-column: 1 / span 2;
+            grid-row: 2;
+            font-size: 0.92rem;
+            color: var(--gray-300);
+            line-height: 1.8;
+            margin: 0;
+        }
         .symptom-card:hover { background: rgba(200,24,26,0.07); border-color: rgba(200,24,26,0.3); transform: translateY(-4px); }
-        .symptom-icon { flex-shrink: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--red-glow); border-radius: 3px; color: var(--red); font-size: 1rem; }
-        .symptom-text { font-size: 0.9rem; color: var(--gray-300); line-height: 1.6; }
-        .symptom-text strong { display: block; color: var(--white); font-weight: 600; margin-bottom: 0.2rem; font-size: 0.95rem; }
 
+        /* ===================== SERVICES ===================== */
         .services-section { padding: 8rem 0; background: var(--navy); position: relative; }
         .services-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 5rem; }
         .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
@@ -322,14 +413,69 @@
         .service-features li { font-size: 0.82rem; color: var(--gray-300); display: flex; align-items: center; gap: 0.5rem; }
         .service-features li::before { content: ''; width: 14px; height: 1.5px; background: var(--red); flex-shrink: 0; }
 
+        /* ===================== LOUPE SECTION ===================== */
         .loupe-section { padding: 8rem 0; background: var(--navy-mid); position: relative; }
         .loupe-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,24,26,0.4), transparent); }
         .loupe-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: 5rem; align-items: center; }
-        .loupe-image-wrapper { position: relative; height: 65vh; min-height: 480px; overflow: hidden; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06); }
-        .main-loupe-image { width: 100%; height: 100%; object-fit: cover; transition: filter 0.8s ease, transform 0.8s ease; }
-        .loupe-image-wrapper, .main-loupe-image { border: none; outline: none; box-shadow: none; }
+        .loupe-image-wrapper { 
+            position: relative; 
+            height: 65vh; 
+            min-height: 480px; 
+            overflow: hidden; 
+            border-radius: 4px; 
+        }
+        .main-loupe-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: filter 0.8s ease, transform 0.8s ease;
+            display: block;
+        }
         .main-loupe-image.is-dimmed { filter: brightness(0.35) blur(5px); transform: scale(0.96); }
-        .digital-loupe { position: absolute; width: 260px; height: 260px; border-radius: 50%; border: 3px solid var(--red); background-repeat: no-repeat; background-color: var(--navy-mid); box-shadow: 0 0 0 1px rgba(200,24,26,0.35), 0 0 0 6px rgba(13,27,53,0.85), inset 0 0 0 2px rgba(255,255,255,0.25), 0 14px 44px rgba(0,0,0,0.65); pointer-events: none; opacity: 0; transform: scale(0.5); will-change: transform, opacity, background-position; }
+        
+        /* FIXED LOUPE — larger, properly zoomed in */
+        .digital-loupe { 
+            position: absolute; 
+            width: 220px; 
+            height: 220px; 
+            border-radius: 50%; 
+            border: 3px solid var(--red); 
+            background-repeat: no-repeat; 
+            background-color: var(--navy-mid); 
+            box-shadow: 
+                0 0 0 1px rgba(200,24,26,0.35), 
+                0 0 0 6px rgba(13,27,53,0.85), 
+                inset 0 0 0 2px rgba(255,255,255,0.25), 
+                0 14px 44px rgba(0,0,0,0.65); 
+            pointer-events: none; 
+            opacity: 0; 
+            transform: scale(0.5); 
+            will-change: transform, opacity, background-position; 
+            /* Crosshair overlay */
+            z-index: 10;
+        }
+        .digital-loupe::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: 
+                linear-gradient(rgba(200,24,26,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(200,24,26,0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            z-index: 1;
+        }
+        .digital-loupe::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            z-index: 2;
+        }
         .loupe-details { display: flex; flex-direction: column; gap: 0.8rem; }
         .loupe-header { margin-bottom: 1.5rem; }
         .hotspot-trigger { background: none; border: none; border-left: 2px solid rgba(255,255,255,0.08); padding: 1.4rem 1.5rem; text-align: left; cursor: pointer; color: var(--gray-300); transition: background 0.3s ease, border-color 0.3s ease; border-radius: 0 4px 4px 0; }
@@ -338,6 +484,7 @@
         .hotspot-trigger h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
         .hotspot-trigger p { font-size: 0.88rem; line-height: 1.65; }
 
+        /* ===================== ABOUT ===================== */
         .about-section { padding: 8rem 0; background: var(--navy); }
         .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
         .about-image-mosaic { position: relative; height: 580px; }
@@ -355,12 +502,14 @@
         .pillar h4 { font-family: var(--font-head); font-size: 0.88rem; font-weight: 700; color: var(--white); margin-bottom: 0.2rem; }
         .pillar p { font-size: 0.8rem; color: var(--gray-300); line-height: 1.55; }
 
+        /* ===================== BRANDS ===================== */
         .brands-section { padding: 4rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); background: var(--navy-mid); }
         .brands-label { font-family: var(--font-head); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-500); text-align: center; margin-bottom: 2.5rem; }
         .brands-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2.5rem 3.5rem; }
         .brand-item { font-family: var(--font-head); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); transition: color 0.3s ease; }
         .brand-item:hover { color: var(--metal); }
 
+        /* ===================== CONTACT ===================== */
         .contact-section { padding: 8rem 0; background: var(--navy); position: relative; }
         .contact-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 5rem; align-items: start; }
         .contact-info { display: flex; flex-direction: column; gap: 2rem; }
@@ -384,6 +533,7 @@
         .form-status.success { background: rgba(22, 160, 80, 0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); display: block; }
         .form-status.error { background: rgba(200,24,26,0.1); color: #fca5a5; border: 1px solid rgba(200,24,26,0.2); display: block; }
 
+        /* ===================== CTA BANNER ===================== */
         .cta-banner { background: var(--red); padding: 5rem 0; position: relative; overflow: hidden; }
         .cta-banner::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 60px 60px; }
         .cta-inner { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
@@ -393,6 +543,7 @@
         .btn-cta-white { background: var(--white); color: var(--red); font-family: var(--font-head); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.9rem 2rem; border-radius: 3px; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
 
+        /* ===================== FOOTER ===================== */
         .site-footer { background: #080f1f; padding: 4rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
         .footer-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.3rem; }
@@ -409,6 +560,7 @@
         .footer-socials a { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); border-radius: 3px; color: var(--gray-500); font-size: 0.9rem; transition: all 0.25s ease; }
         .footer-socials a:hover { border-color: var(--red); color: var(--white); background: var(--red-glow); }
 
+        /* ===================== RESPONSIVE ===================== */
         @media (max-width: 1024px) {
             .services-grid { grid-template-columns: 1fr; }
             .about-layout { grid-template-columns: 1fr; gap: 3rem; }
@@ -417,19 +569,66 @@
             .footer-grid { grid-template-columns: 1fr 1fr; }
             #showcase-container { height: 400px; margin-top: 0.5rem; --slide-size: 440px; --carousel-radius: 360px; }
         }
+
         @media (max-width: 768px) {
             .main-nav, .header-phone { display: none; }
             .burger { display: flex; }
             .mobile-menu { display: flex; }
-            .hero-content { padding: 1.75rem 0 1.5rem; }
-            .hero-eyebrow { font-size: 0.66rem; gap: 0.6rem; margin-bottom: 1.1rem; }
-            .hero-eyebrow::before { width: 22px; }
-            .hero-title { margin-bottom: 0.9rem; }
-            .hero-subtitle { margin: 0 auto 0.6rem; font-size: 0.95rem; max-width: 36ch; }
-            #showcase-container { height: 300px; margin-top: 0.3rem; --slide-size: 260px; --carousel-radius: 215px; }
-            .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; margin-top: 0.7rem; padding-top: 1.1rem; }
-            .hero-stat-num { font-size: 2.3rem; }
-            .hero-stat-label { font-size: 0.7rem; }
+
+            /* ---- HERO MOBILE FIX ---- */
+            .hero-section {
+                min-height: 100svh; /* use small viewport height on mobile */
+                justify-content: flex-start;
+                padding-top: calc(var(--header-h) + 1.5rem);
+                padding-bottom: 2rem;
+            }
+            .hero-content {
+                padding: 0;
+                gap: 0; /* remove gap, control spacing manually */
+            }
+            .hero-eyebrow { 
+                font-size: 0.64rem; 
+                gap: 0.5rem; 
+                margin-bottom: 0.9rem; 
+                letter-spacing: 0.18em;
+            }
+            .hero-eyebrow::before { width: 20px; }
+            .hero-title { 
+                font-size: clamp(2.8rem, 13vw, 3.8rem);
+                margin-bottom: 0.75rem; 
+                line-height: 0.92;
+            }
+            .hero-subtitle { 
+                font-size: 0.9rem; 
+                max-width: 34ch; 
+                margin: 0 auto 1rem;
+                line-height: 1.7;
+            }
+            .hero-actions {
+                margin-bottom: 0.5rem;
+                gap: 0.75rem;
+            }
+
+            /* carousel on mobile: more breathing room */
+            #showcase-container { 
+                height: 240px; 
+                margin: 0.5rem auto 0.25rem;
+                --slide-size: 220px; 
+                --carousel-radius: 190px; 
+            }
+            
+            /* stats on mobile: compact 2-column */
+            .hero-stats { 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                gap: 1rem 1.5rem;
+                margin-top: 0.75rem; 
+                padding-top: 1rem;
+                width: 100%;
+            }
+            .hero-stat-num { font-size: 2rem; }
+            .hero-stat-label { font-size: 0.68rem; letter-spacing: 0.07em; }
+
             .services-intro { grid-template-columns: 1fr; gap: 2rem; }
             .loupe-layout { grid-template-columns: 1fr; gap: 2.5rem; }
             .loupe-image-wrapper { height: 50vh; min-height: 320px; }
@@ -438,24 +637,65 @@
             .cta-inner { justify-content: center; text-align: center; }
             .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .footer-bottom { flex-direction: column; text-align: center; }
+            
+            /* loupe smaller on mobile */
+            .digital-loupe { width: 160px; height: 160px; }
         }
+
         @media (max-width: 480px) {
             :root { --header-h: 60px; }
-            .hero-actions { flex-direction: column; }
-            .hero-actions .btn { justify-content: center; }
-            .hero-content { padding: 1.5rem 0 1.25rem; }
-            .hero-title { font-size: clamp(2.6rem, 13vw, 3.4rem); margin-bottom: 0.75rem; }
-            .hero-subtitle { font-size: 0.88rem; margin-bottom: 0.5rem; max-width: 30ch; }
-            #showcase-container { height: 250px; margin-top: 0.25rem; --slide-size: 215px; --carousel-radius: 175px; }
-            .hero-stats { gap: 1.1rem 0.75rem; margin-top: 0.6rem; padding-top: 0.9rem; }
-            .hero-stat-num { font-size: 1.9rem; }
-            .hero-stat-label { font-size: 0.62rem; letter-spacing: 0.06em; }
+            
+            .hero-section {
+                padding-top: calc(var(--header-h) + 1rem);
+                padding-bottom: 1.5rem;
+            }
+            .hero-eyebrow { 
+                font-size: 0.6rem; 
+                margin-bottom: 0.7rem;
+            }
+            .hero-title { 
+                font-size: clamp(2.6rem, 14vw, 3.4rem); 
+                margin-bottom: 0.65rem; 
+            }
+            .hero-subtitle { 
+                font-size: 0.85rem; 
+                margin-bottom: 0.85rem;
+                max-width: 28ch;
+            }
+            .hero-actions { 
+                flex-direction: column; 
+                align-items: center;
+                width: 100%;
+                margin-bottom: 0.35rem;
+            }
+            .hero-actions .btn { 
+                justify-content: center; 
+                width: 100%;
+                max-width: 280px;
+            }
+            #showcase-container { 
+                height: 200px; 
+                margin: 0.25rem auto 0;
+                --slide-size: 185px; 
+                --carousel-radius: 158px; 
+            }
+            .hero-stats { 
+                gap: 0.85rem 1rem;
+                margin-top: 0.6rem;
+                padding-top: 0.85rem;
+            }
+            .hero-stat-num { font-size: 1.75rem; }
+            .hero-stat-label { font-size: 0.6rem; }
+
             .symptoms-grid { grid-template-columns: 1fr; }
             .services-grid { grid-template-columns: 1fr; }
         }
+
         @media (prefers-reduced-motion: reduce) {
             .service-card.is-highlighted { animation: none !important; box-shadow: 0 0 0 2px var(--red) !important; transition: box-shadow 0.3s ease; }
             .service-card.is-highlighted::before { animation: none !important; transform: scaleX(1) !important; }
+            .slide-popup-btn .popup-dot { animation: none; }
+            .slide-popup-btn::before { display: none; }
         }
     </style>
 </head>
@@ -497,13 +737,16 @@
     <div class="container hero-content">
         <p class="hero-eyebrow">თბილისი, საქართველო &mdash; 15+ წლიანი გამოცდილება</p>
         <h1 class="hero-title">
-            დიზელის<br>
-            <span class="line-red">სახელოსნო</span>
+            დიზელის <span class="line-red">სახელოსნო</span>
         </h1>
         <p class="hero-subtitle">
             ძრავი, ტურბო, საწვავის სისტემა &mdash; სრული ციკლის სერვისი
             ევროპული სტანდარტის აღჭურვილობით.
         </p>
+        <div class="hero-actions">
+            <a href="#contact" class="btn btn-red"><i class="fas fa-calendar-check"></i> ჩაწეროთ სერვისში</a>
+            <a href="#services" class="btn btn-outline">სერვისები</a>
+        </div>
         <div id="showcase-container" aria-label="სერვისების გალერეა">
             <div class="carousel-wrapper">
                 <div class="carousel" id="carousel">
@@ -588,59 +831,43 @@
         <div class="symptoms-grid">
             <div class="symptom-card" data-reveal data-reveal-delay="1">
                 <div class="symptom-icon"><i class="fas fa-smog" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>შავი კვამლი გამონაბოლქვიდან</strong>
-                    საწვავი სრულად ვერ იწვის — მიზეზი შესაძლოა ინჟექტორების, ტურბოს ან საწვავის სისტემის გაუმართაობა იყოს.
-                </div>
+                <strong>შავი კვამლი გამონაბოლქვიდან</strong>
+                <p class="symptom-desc">საწვავი სრულად ვერ იწვის — მიზეზი შესაძლოა ინჟექტორების, ტურბოს ან საწვავის სისტემის გაუმართაობა იყოს.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="2">
                 <div class="symptom-icon"><i class="fas fa-clipboard-check" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>ავტომობილი ვერ გადის ტექნიკურ დათვალიერებას</strong>
-                    გამონაბოლქვი სტანდარტებს არ აკმაყოფილებს — ზუსტად ვადგენთ მიზეზს და პროფესიონალურად ვაგვარებთ პრობლემას.
-                </div>
+                <strong>ვერ გადის ტექნიკურ დათვალიერებას</strong>
+                <p class="symptom-desc">გამონაბოლქვი სტანდარტებს არ აკმაყოფილებს — ზუსტად ვადგენთ მიზეზს და პროფესიონალურად ვაგვარებთ პრობლემას.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="3">
                 <div class="symptom-icon"><i class="fas fa-oil-can" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>ზეთის მომატებული მოხმარება</strong>
-                    შესაძლოა მიზეზი იყოს ძრავის ცვეთა ან ტურბოს ზეთის გაჟონვა. დროული დიაგნოსტიკა ძრავს სერიოზული დაზიანებისგან იცავს.
-                </div>
+                <strong>ზეთის მომატებული მოხმარება</strong>
+                <p class="symptom-desc">შესაძლოა მიზეზი იყოს ძრავის ცვეთა ან ტურბოს ზეთის გაჟონვა. დროული დიაგნოსტიკა ძრავს დაზიანებისგან იცავს.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="4">
                 <div class="symptom-icon"><i class="fas fa-key" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>ძნელად ქოქავს ცივ ამინდში</strong>
-                    შესაძლოა პრობლემა საწვავის სისტემაში ან გახურების სანთლებში (Glow Plug) იყოს.
-                </div>
+                <strong>ძნელად ქოქავს ცივ ამინდში</strong>
+                <p class="symptom-desc">ხშირად ეს მიუთითებს პრობლემაზე საწვავის სისტემაში, წნევის ვარდნაზე ან გახურების სანთლების (Glow Plug) გაუმართაობაზე.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="1">
                 <div class="symptom-icon"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>ძრავი ვიბრირებს ან უჩვეულოდ ხმაურობს</strong>
-                    ინჟექტორების არათანაბარი მუშაობა ან კომპრესიის ვარდნა — ასეთ შემთხვევაში სასწრაფო შემოწმება აუცილებელია.
-                </div>
+                <strong>ვიბრირებს ან უჩვეულოდ ხმაურობს</strong>
+                <p class="symptom-desc">ინჟექტორების არათანაბარი მუშაობა ან კომპრესიის ვარდნა — ასეთ შემთხვევაში ავტომობილის სასწრაფო შემოწმება აუცილებელია.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="2">
                 <div class="symptom-icon"><i class="fas fa-tachometer-alt" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>სიმძლავრის კლება</strong>
-                    ტურბოს გაუმართაობა ან საწვავის სისტემის დაბინძურება პირდაპირ აისახება ავტომობილის მუშაობასა და დინამიკაზე.
-                </div>
+                <strong>სიმძლავრის საგრძნობი კლება</strong>
+                <p class="symptom-desc">ტურბოს გაუმართაობა ან საწვავის სისტემის დაბინძურება პირდაპირ აისახება ავტომობილის დინამიკასა და სიმძლავრეზე.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="3">
                 <div class="symptom-icon"><i class="fas fa-stopwatch" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>დაყოვნება აჩქარებისას (ტურბო ლეგი)</strong>
-                    ტურბო დაგვიანებით ერთვება ან საწვავის წნევა დაქვეითებულია — დიაგნოსტიკით ზუსტად ვადგენთ მიზეზს.
-                </div>
+                <strong>დაყოვნება აჩქარებისას (ტურბო ლეგი)</strong>
+                <p class="symptom-desc">ტურბო დაგვიანებით ერთვება ან საწვავის წნევა დაქვეითებულია — დიაგნოსტიკით ზუსტად ვადგენთ პრობლემურ წერტილებს.</p>
             </div>
             <div class="symptom-card" data-reveal data-reveal-delay="4">
                 <div class="symptom-icon"><i class="fas fa-filter" aria-hidden="true"></i></div>
-                <div class="symptom-text">
-                    <strong>DPF / FAP ნაწილაკების ფილტრი ჩახშობილია</strong>
-                    გაჭედილი ფილტრი ძრავის მუშაობას აფერხებს და საწვავის ხარჯს ზრდის. ვახორციელებთ პროფესიონალურ გაწმენდასა და საჭიროების შემთხვევაში გადაპროგრამებას.
-                </div>
+                <strong>DPF / FAP ფილტრი ჩახშობილია</strong>
+                <p class="symptom-desc">გაჭედილი ფილტრი აფერხებს ძრავის მუშაობას და ზრდის ხარჯს. ვახორციელებთ გაწმენდას და საჭიროებისას გადაპროგრამებას.</p>
             </div>
         </div>
     </div>
@@ -731,10 +958,6 @@
                 <div class="digital-loupe" id="digital-loupe" aria-hidden="true"></div>
             </div>
             <div class="loupe-details" data-reveal>
-                <div class="loupe-header">
-                    <span class="section-label">ინტერაქტიური ხედი</span>
-                    <h3 class="section-title" style="font-size:1.6rem;">აირჩიეთ<br><em>კომპონენტი</em></h3>
-                </div>
                 <button class="hotspot-trigger is-active" data-hotspot-id="1" data-x="34%" data-y="28%">
                     <h3>საწვავის მაღალი წნევის სისტემა</h3>
                     <p>Common Rail სისტემა ქმნის 1800+ ბარ წნევას. უმნიშვნელო გაჟონვაც კი ამცირებს ეფექტიანობას — ვამოწმებთ ელექტრული სტენდით.</p>
@@ -752,7 +975,6 @@
     </div>
 </section>
 
-<!-- ABOUT — updated text per client brief -->
 <section class="about-section" id="about">
     <div class="container">
         <div class="about-layout">
@@ -968,6 +1190,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+    // 1. DYNAMIC UI ELEMENTS
     const getHeaderHeight = () => {
         const raw = getComputedStyle(document.documentElement).getPropertyValue('--header-h').trim();
         return parseFloat(raw) || 72;
@@ -981,29 +1204,37 @@ document.addEventListener('DOMContentLoaded', () => {
         header.classList.toggle('scrolled', window.scrollY > 60);
     }, { passive: true });
 
-    const burger     = document.getElementById('burger');
+    // 2. MOBILE MENU
+    const burger = document.getElementById('burger');
     const mobileMenu = document.getElementById('mobile-menu');
-    burger.addEventListener('click', () => {
-        const isOpen = burger.classList.toggle('is-active');
-        mobileMenu.classList.toggle('is-open', isOpen);
-        burger.setAttribute('aria-expanded', String(isOpen));
-    });
-    mobileMenu.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-            burger.classList.remove('is-active');
-            mobileMenu.classList.remove('is-open');
-            burger.setAttribute('aria-expanded', 'false');
+    if (burger && mobileMenu) {
+        burger.addEventListener('click', () => {
+            const isOpen = burger.classList.toggle('is-active');
+            mobileMenu.classList.toggle('is-open', isOpen);
+            burger.setAttribute('aria-expanded', String(isOpen));
         });
-    });
+        mobileMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                burger.classList.remove('is-active');
+                mobileMenu.classList.remove('is-open');
+                burger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
 
-    const reveals   = document.querySelectorAll('[data-reveal]');
+    // 3. FADE-IN REVEAL ON SCROLL
+    const reveals = document.querySelectorAll('[data-reveal]');
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
-            if (e.isIntersecting) { e.target.classList.add('is-visible'); revealObs.unobserve(e.target); }
+            if (e.isIntersecting) { 
+                e.target.classList.add('is-visible'); 
+                revealObs.unobserve(e.target); 
+            }
         });
     }, { threshold: 0.1 });
     reveals.forEach(el => revealObs.observe(el));
 
+    // 4. SERVICE NAVIGATION & HIGHLIGHTING
     const HIGHLIGHT_DURATION_MS = 2600;
     let highlightTimer = null;
     const highlightServiceCard = (card) => {
@@ -1013,39 +1244,38 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.service-card.is-highlighted').forEach(el => el.classList.remove('is-highlighted'));
         }
         card.classList.remove('is-highlighted');
-        card.offsetHeight;
+        void card.offsetWidth;
         card.classList.add('is-highlighted');
-        highlightTimer = setTimeout(() => { card.classList.remove('is-highlighted'); highlightTimer = null; }, HIGHLIGHT_DURATION_MS);
+        highlightTimer = setTimeout(() => { 
+            card.classList.remove('is-highlighted'); 
+            highlightTimer = null; 
+        }, HIGHLIGHT_DURATION_MS);
     };
 
-    const SCROLL_OFFSET_EXTRA = 24;
-    const HIGHLIGHT_DELAY_MS  = 60;
     const navigateToService = (targetSelector) => {
         if (!targetSelector) return;
         const targetEl = document.querySelector(targetSelector);
         if (!targetEl) return;
-        const headerH  = getHeaderHeight();
-        const offset   = headerH + SCROLL_OFFSET_EXTRA;
-        const targetY  = targetEl.getBoundingClientRect().top + window.scrollY - offset;
-        const distance = Math.abs(window.scrollY - targetY);
-        const estimatedScrollMs = Math.min(Math.max(distance * 0.25, 120), 350);
+        const headerH = getHeaderHeight();
+        const offset = headerH + 24;
+        const targetY = targetEl.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({ top: targetY, behavior: 'smooth' });
-        setTimeout(() => { highlightServiceCard(targetEl); }, estimatedScrollMs + HIGHLIGHT_DELAY_MS);
+        setTimeout(() => { highlightServiceCard(targetEl); }, 600);
     };
 
+    // 5. HERO 3D CAROUSEL
     (() => {
-        const wrapper   = document.querySelector('.carousel-wrapper');
+        const wrapper = document.querySelector('.carousel-wrapper');
         const container = document.getElementById('showcase-container');
-        const slides    = gsap.utils.toArray('.slide');
-        const popupBtn  = document.getElementById('slide-popup-btn');
+        const slides = gsap.utils.toArray('.slide');
+        const popupBtn = document.getElementById('slide-popup-btn');
         const popupText = document.getElementById('slide-popup-text');
         if (!wrapper || !container || slides.length === 0) return;
 
         const getSlideLabel = (slide) => slide.dataset.label || (slide.querySelector('img')?.alt) || '';
         const getRadius = () => {
             const cssVal = getComputedStyle(container).getPropertyValue('--carousel-radius').trim();
-            const parsed = parseFloat(cssVal);
-            return Number.isFinite(parsed) ? parsed : 320;
+            return parseFloat(cssVal) || 400;
         };
 
         slides.forEach((slide, i) => { slide.dataset.rotation = i * (360 / slides.length); });
@@ -1053,143 +1283,164 @@ document.addEventListener('DOMContentLoaded', () => {
         const applyGeometry = () => {
             const radius = getRadius();
             slides.forEach(slide => {
-                gsap.set(slide, { rotationY: parseFloat(slide.dataset.rotation), transformOrigin: `50% 50% ${-radius}px`, x: -slide.offsetWidth / 2, y: -slide.offsetHeight / 2 });
+                gsap.set(slide, { 
+                    rotationY: parseFloat(slide.dataset.rotation), 
+                    transformOrigin: `50% 50% ${-radius}px`, 
+                    x: -slide.offsetWidth / 2, 
+                    y: -slide.offsetHeight / 2 
+                });
             });
         };
         applyGeometry();
 
         let currentFrontSlide = null;
-        let popupVisible      = false;
-        let popupAnimating    = false;
+        let popupVisible = false;
         const FRONT_THRESHOLD = 40;
 
         const showPopup = (slide) => {
             const label = getSlideLabel(slide);
             popupText.textContent = label + ' →';
-            popupBtn.setAttribute('aria-label', label + '-ის სერვისზე გადასვლა');
             popupBtn.dataset.target = slide.dataset.target;
-            if (popupVisible && !popupAnimating) return;
-            popupAnimating = true;
+            if (popupVisible) return;
             gsap.killTweensOf(popupBtn);
-            gsap.to(popupBtn, { opacity: 1, y: 0, scale: 1, duration: 0.52, ease: 'back.out(1.6)', onComplete: () => { popupAnimating = false; } });
+            gsap.to(popupBtn, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.5)' });
             popupVisible = true;
         };
+
         const hidePopup = () => {
             if (!popupVisible) return;
-            popupAnimating = true;
             gsap.killTweensOf(popupBtn);
-            gsap.to(popupBtn, { opacity: 0, y: 12, scale: 0.93, duration: 0.32, ease: 'power2.in', onComplete: () => { popupAnimating = false; popupVisible = false; } });
+            gsap.to(popupBtn, { opacity: 0, y: 15, scale: 0.95, duration: 0.3 });
+            popupVisible = false;
         };
 
-        popupBtn.addEventListener('click', () => { const t = popupBtn.dataset.target; if (t) navigateToService(t); });
+        popupBtn.addEventListener('click', () => { if (popupBtn.dataset.target) navigateToService(popupBtn.dataset.target); });
 
         const proxy = { value: 0 };
         const autoTween = gsap.to(proxy, {
-            value: 360, duration: 18, ease: 'none', repeat: -1,
+            value: 360, duration: 20, ease: 'none', repeat: -1,
             onUpdate: () => {
-                let frontSlide = null, frontAngleDist = Infinity;
+                let frontSlide = null; let minAngle = Infinity;
                 slides.forEach(slide => {
-                    const absAngle  = parseFloat(slide.dataset.rotation) + proxy.value;
-                    const relAngle  = Math.abs(absAngle % 360);
-                    const n         = Math.min(relAngle, 360 - relAngle) / 180;
-                    const angleDist = Math.min(relAngle, 360 - relAngle);
-                    gsap.set(slide, { rotationY: absAngle, filter: `brightness(${1 - n * 0.55})`, opacity: 1 - n * 0.45, scale: 1 - n * 0.28, zIndex: Math.round(100 * (1 - n)), pointerEvents: angleDist < FRONT_THRESHOLD ? 'auto' : 'none' });
-                    if (angleDist < frontAngleDist) { frontAngleDist = angleDist; frontSlide = slide; }
+                    const absAngle = parseFloat(slide.dataset.rotation) + proxy.value;
+                    const relAngle = Math.abs(absAngle % 360);
+                    const n = Math.min(relAngle, 360 - relAngle) / 180;
+                    const dist = Math.min(relAngle, 360 - relAngle);
+                    
+                    gsap.set(slide, { 
+                        rotationY: absAngle, 
+                        filter: `brightness(${1 - n * 0.5})`, 
+                        opacity: 1 - n * 0.4, 
+                        scale: 1 - n * 0.25, 
+                        zIndex: Math.round(100 * (1 - n)),
+                        pointerEvents: dist < FRONT_THRESHOLD ? 'auto' : 'none'
+                    });
+
+                    if (dist < minAngle) { minAngle = dist; frontSlide = slide; }
                 });
+
                 if (frontSlide !== currentFrontSlide) {
                     currentFrontSlide = frontSlide;
-                    if (frontSlide && frontAngleDist < FRONT_THRESHOLD) showPopup(frontSlide); else hidePopup();
+                    if (minAngle < FRONT_THRESHOLD) showPopup(frontSlide); else hidePopup();
                 }
             }
         });
 
-        wrapper.addEventListener('mouseenter', () => gsap.to(autoTween, { timeScale: 0, duration: 0.5 }));
-        wrapper.addEventListener('mouseleave', () => gsap.to(autoTween, { timeScale: 1, duration: 0.5 }));
-
-        let resizeTimer;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(applyGeometry, 150); }, { passive: true });
-
-        slides.forEach(slide => {
-            const handleActivation = () => {
-                const absAngle  = parseFloat(slide.dataset.rotation) + proxy.value;
-                const relAngle  = Math.abs(absAngle % 360);
-                const angleDist = Math.min(relAngle, 360 - relAngle);
-                if (angleDist > FRONT_THRESHOLD) return;
-                navigateToService(slide.dataset.target);
-            };
-            slide.addEventListener('click', handleActivation);
-            slide.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivation(); } });
-        });
+        container.addEventListener('mouseenter', () => gsap.to(autoTween, { timeScale: 0, duration: 0.6 }));
+        container.addEventListener('mouseleave', () => gsap.to(autoTween, { timeScale: 1, duration: 0.6 }));
+        window.addEventListener('resize', applyGeometry);
     })();
 
+    // 6. DIAGNOSTIC LOUPE — FIXED ZOOM
     (() => {
         const explorer = document.querySelector('.loupe-layout');
-        if (!explorer) return;
-        const triggers = explorer.querySelectorAll('.hotspot-trigger');
-        const mainImg  = document.getElementById('main-loupe-image');
-        const loupe    = document.getElementById('digital-loupe');
-        const isMobile = window.innerWidth <= 768;
-        if (!mainImg || !loupe) return;
+        const mainImg = document.getElementById('main-loupe-image');
+        const loupe = document.getElementById('digital-loupe');
+        const triggers = document.querySelectorAll('.hotspot-trigger');
+        if (!explorer || !mainImg || !loupe) return;
 
-        const ZOOM = 0.8;
+        // ZOOM_FACTOR > 1 = more zoomed in. 2.5 gives a tight crop around the hotspot.
+        const ZOOM_FACTOR = 2.5;
+        const LOUPE_SIZE = loupe.offsetWidth || 220;
 
-        const computeBackgroundPosition = (xPct, yPct) => {
+        const updateLoupeBackground = () => {
             const rect = mainImg.getBoundingClientRect();
-            const cw = rect.width, ch = rect.height;
-            const bgW = cw * ZOOM, bgH = ch * ZOOM;
-            const loupeSize = loupe.getBoundingClientRect().width || 260;
-            const posX = (loupeSize / 2) - (xPct * bgW);
-            const posY = (loupeSize / 2) - (yPct * bgH);
-            return `${posX}px ${posY}px`;
-        };
-
-        const setLoupeImage = () => {
+            const scaledW = rect.width * ZOOM_FACTOR;
+            const scaledH = rect.height * ZOOM_FACTOR;
+            loupe.style.backgroundSize = `${scaledW}px ${scaledH}px`;
             loupe.style.backgroundImage = `url("${mainImg.currentSrc || mainImg.src}")`;
-            loupe.style.backgroundSize  = `${mainImg.getBoundingClientRect().width * ZOOM}px ${mainImg.getBoundingClientRect().height * ZOOM}px`;
         };
 
-        if (mainImg.complete && mainImg.naturalWidth > 0) setLoupeImage();
-        else mainImg.addEventListener('load', setLoupeImage, { once: true });
-
-        let resizeTimer;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(setLoupeImage, 150); }, { passive: true });
-
-        const parsePct = (val) => parseFloat(val) / 100;
+        const computeBGPos = (xPct, yPct) => {
+            const rect = mainImg.getBoundingClientRect();
+            const scaledW = rect.width * ZOOM_FACTOR;
+            const scaledH = rect.height * ZOOM_FACTOR;
+            const lSize = loupe.offsetWidth || LOUPE_SIZE;
+            // Center the zoomed image on the hotspot coordinates
+            const bgX = (lSize / 2) - (xPct * scaledW);
+            const bgY = (lSize / 2) - (yPct * scaledH);
+            return `${bgX}px ${bgY}px`;
+        };
 
         const moveLoupeTo = (trigger) => {
-            const xPct = parsePct(trigger.dataset.x);
-            const yPct = parsePct(trigger.dataset.y);
+            const xStr = trigger.dataset.x;
+            const yStr = trigger.dataset.y;
+            const xPct = parseFloat(xStr) / 100;
+            const yPct = parseFloat(yStr) / 100;
+            
             mainImg.classList.add('is-dimmed');
-            gsap.to(loupe, { left: trigger.dataset.x, top: trigger.dataset.y, xPercent: -50, yPercent: -50, opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out', backgroundPosition: computeBackgroundPosition(xPct, yPct) });
+            updateLoupeBackground();
+
+            gsap.to(loupe, { 
+                left: xStr, 
+                top: yStr, 
+                xPercent: -50, 
+                yPercent: -50,
+                opacity: 1, 
+                scale: 1, 
+                duration: 1.1, 
+                ease: 'power3.out',
+                backgroundPosition: computeBGPos(xPct, yPct)
+            });
         };
 
-        triggers.forEach(trigger => {
-            trigger.addEventListener('click', () => {
-                if (trigger.classList.contains('is-active')) return;
-                triggers.forEach(t => t.classList.remove('is-active'));
-                trigger.classList.add('is-active');
-                moveLoupeTo(trigger);
-            });
+        // Init background once image loads
+        const initLoupe = () => {
+            updateLoupeBackground();
+        };
+        if (mainImg.complete) initLoupe(); 
+        else mainImg.addEventListener('load', initLoupe);
+
+        // Update on resize
+        window.addEventListener('resize', () => {
+            updateLoupeBackground();
+            // Re-apply current active trigger's position
+            const activeTrigger = document.querySelector('.hotspot-trigger.is-active');
+            if (activeTrigger && parseFloat(gsap.getProperty(loupe, 'opacity')) > 0) {
+                const xPct = parseFloat(activeTrigger.dataset.x) / 100;
+                const yPct = parseFloat(activeTrigger.dataset.y) / 100;
+                gsap.set(loupe, { backgroundPosition: computeBGPos(xPct, yPct) });
+            }
         });
 
+        triggers.forEach(t => t.addEventListener('click', () => {
+            triggers.forEach(trig => trig.classList.remove('is-active'));
+            t.classList.add('is-active');
+            moveLoupeTo(t);
+        }));
+
+        // Auto-intro on scroll into view
         const loupeObs = new IntersectionObserver((entries) => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
                     loupeObs.unobserve(explorer);
-                    if (isMobile) {
-                        const first = triggers[0];
-                        if (!first) return;
-                        const xPct = parsePct(first.dataset.x), yPct = parsePct(first.dataset.y);
-                        const tl = gsap.timeline();
-                        tl.to(first, { borderLeftColor: 'var(--red)', backgroundColor: 'rgba(200,24,26,0.08)', duration: 0.5 });
-                        tl.add(() => mainImg.classList.add('is-dimmed'), '<');
-                        tl.to(loupe, { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out', left: first.dataset.x, top: first.dataset.y, xPercent: -50, yPercent: -50, backgroundPosition: computeBackgroundPosition(xPct, yPct) }, '<');
-                        tl.to({}, { duration: 2 });
-                        tl.add(() => mainImg.classList.remove('is-dimmed'));
-                        tl.to(loupe, { opacity: 0, scale: 0.5, duration: 0.7, ease: 'power3.inOut' }, '<');
-                        tl.set(first, { clearProps: 'all' });
-                    } else {
-                        gsap.fromTo(triggers, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.7, stagger: 0.18, ease: 'power2.out' });
+                    gsap.fromTo(triggers, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.7, stagger: 0.15, ease: 'power2.out' });
+                    const firstTrigger = triggers[0];
+                    if (firstTrigger) {
+                        setTimeout(() => {
+                            firstTrigger.classList.add('is-active');
+                            moveLoupeTo(firstTrigger);
+                        }, 800);
                     }
                 }
             });
@@ -1197,31 +1448,29 @@ document.addEventListener('DOMContentLoaded', () => {
         loupeObs.observe(explorer);
     })();
 
+    // 7. CONTACT FORM HANDLER
     (() => {
         const form = document.getElementById('contact-form');
         if (!form) return;
-        const btn     = form.querySelector('button[type="submit"]');
+        const btn = form.querySelector('button[type="submit"]');
         const btnText = form.querySelector('.btn-text');
-        const btnIcon = form.querySelector('.btn-icon');
-        const status  = document.getElementById('form-status');
+        const status = document.getElementById('form-status');
+        
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            btn.disabled = true; btnText.textContent = 'იგზავნება...'; btnIcon.className = 'fas fa-spinner fa-spin btn-icon'; status.className = 'form-status';
+            btn.disabled = true; btnText.textContent = 'იგზავნება...';
             try {
                 const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
                 if (res.ok) {
-                    btnText.textContent = 'გაგზავნილია'; btnIcon.className = 'fas fa-check btn-icon';
-                    status.textContent = 'გმადლობთ! მალე დაგიკავშირდებით.'; status.className = 'form-status success';
-                    form.reset();
-                    setTimeout(() => { btn.disabled = false; btnText.textContent = 'გაგზავნა'; btnIcon.className = 'fas fa-arrow-right btn-icon'; status.className = 'form-status'; }, 4000);
-                } else { throw new Error('Server error'); }
+                    btnText.textContent = 'გაგზავნილია'; status.textContent = 'მალე დაგიკავშირდებით!';
+                    status.className = 'form-status success'; form.reset();
+                } else { throw new Error(); }
             } catch {
-                btn.disabled = false; btnText.textContent = 'გაგზავნა'; btnIcon.className = 'fas fa-arrow-right btn-icon';
-                status.textContent = 'შეცდომა. სცადეთ ხელახლა ან დარეკეთ.'; status.className = 'form-status error';
+                btn.disabled = false; btnText.textContent = 'გაგზავნა';
+                status.textContent = 'შეცდომაა. დარეკეთ ნომერზე.'; status.className = 'form-status error';
             }
         });
     })();
-
 });
 </script>
 </body>
